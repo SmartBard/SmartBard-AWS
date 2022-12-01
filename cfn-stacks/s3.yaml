@@ -12,8 +12,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: Private
-      BucketName: 
-        Ref: BucketName
+      BucketName: !Ref BucketName
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -24,8 +23,7 @@ Resources:
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: 
-        Ref: S3Bucket
+      Bucket: !Ref S3Bucket
       PolicyDocument: 
         Version: 2012-10-17
         Statement:
@@ -34,8 +32,5 @@ Resources:
               - 's3:PutObject'
               - 's3:ListObjectsV2'
             Effect: Allow
-            Resource: 
-              - '*'
-            Principal: 
-              - AWS: 
-                - '*'
+            Resource: '*'
+            Principal: '*'
