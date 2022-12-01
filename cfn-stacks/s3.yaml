@@ -24,14 +24,18 @@ Resources:
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref S3Bucket
+      Bucket: 
+        Ref: S3Bucket
       PolicyDocument: 
         Version: 2012-10-17
         Statement:
           - Action:
               - 's3:GetObject'
               - 's3:PutObject'
+              - 's3:ListObjectsV2'
             Effect: Allow
             Resource: 
               - '*'
-            Principal: '*'
+            Principal: 
+              - AWS: 
+                - '*'
