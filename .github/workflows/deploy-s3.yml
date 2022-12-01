@@ -1,12 +1,17 @@
 name: Deploy S3 Cloudformation Stack
 
 on:
+  push:
+    paths:
+      - 'cfn-stacks/s3.yaml'
+
   workflow_dispatch:
     inputs:
       region:
         description: 'AWS Region to deploy to'
         required: true
         default: 'us-east-1'
+
 
 jobs:
   s3-cfn-deployment:

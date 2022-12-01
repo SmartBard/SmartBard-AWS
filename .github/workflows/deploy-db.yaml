@@ -1,12 +1,17 @@
 name: Deploy Postgres Cloudformation Stack
 
 on:
+  push:
+    paths:
+      - 'cfn-stacks/db.yaml'
+
   workflow_dispatch:
     inputs:
       region:
         description: 'AWS Region to deploy to'
         required: true
         default: 'us-east-1'
+
 
 jobs:
   ec2-cfn-deployment:
