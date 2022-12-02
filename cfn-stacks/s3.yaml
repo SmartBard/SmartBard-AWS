@@ -33,5 +33,5 @@ Resources:
               - 's3:List*'
             Effect: Allow
             Resource: 
-              - !Sub "arn:aws:s3:::${BucketName}"
+              - !Sub "arn:aws:s3:::${BucketName}/*"
             Principal: '*'
