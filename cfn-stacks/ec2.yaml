@@ -10,13 +10,6 @@ Resources:
       EnableDnsHostnames: false
       InstanceTenancy: default
 
-  Subnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: us-east-1
-      VpcId: !GetAtt VPC.VpcID
-      CidrBlock: 10.0.0.0/16
-
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
