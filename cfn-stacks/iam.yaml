@@ -3,7 +3,7 @@ Description: SmartBard IAM Role Cloudformation Template
 
 Parameters: 
   IAMRoleName: 
-    Description: 
+    Description: General IAM Role for SmartBard
     Type: String
     Default: smbd-iam
 Resources: 
