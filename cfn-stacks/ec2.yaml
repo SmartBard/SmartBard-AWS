@@ -7,9 +7,19 @@ Parameters:
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 Resources: 
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      EnableDnsSupport: false
+      EnableDnsHostnames: false
+      InstanceTenancy: default
+
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref LatestAmiId
       InstanceType: t3.small
       Monitoring: true
+      SecurityGroupIds:
+        - !GetAtt VPC.DefaultSecurityGroup
