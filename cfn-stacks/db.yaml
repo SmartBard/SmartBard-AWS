@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard Database Cloudformation Template
 Parameters: 
   DBName: 
-    Default: smbd-db
+    Default: smbdDB
     Description: RDS Database Storing SmartBard Announcement and User Data
     Type: String
 
