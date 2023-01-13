@@ -13,7 +13,7 @@ Resources:
   Subnet:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: us-east-1
+      AvailabilityZone: us-east-1a
       VpcId: !GetAtt VPC.VpcId
       CidrBlock: 10.0.0.0/16
 
@@ -25,3 +25,4 @@ Resources:
       Monitoring: true
       SecurityGroupIds:
         - !GetAtt VPC.DefaultSecurityGroup
+      SubnetId: !Ref Subnet
