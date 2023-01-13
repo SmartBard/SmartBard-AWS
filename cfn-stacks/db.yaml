@@ -7,7 +7,7 @@ Parameters:
     Type: String
 
   DBUser:
-    NoEcho: 'true'
+    Default: tempUser
     Description: The database admin account username
     Type: String
     MinLength: '1'
@@ -16,8 +16,8 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
   DBPassword:
-    NoEcho: 'true'
-    Description: The database admin account password
+    Default: tempPWD
+    Description: The database admin account password (will need to changed for security later. Secrets Manager?)
     Type: String
     MinLength: '1'
     MaxLength: '41'
