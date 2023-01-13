@@ -5,7 +5,8 @@ Parameters:
   IAMRoleName: 
     Description: General IAM Role for SmartBard
     Type: String
-    Default: smbd-iam
+    Default: SMBDGeneralRole
+
 Resources: 
   IAM Role:
     Type: AWS::IAM::Role
