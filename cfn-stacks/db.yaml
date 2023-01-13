@@ -14,6 +14,7 @@ Parameters:
   DBPassword:
     Default: temp-password
     Description: Placeholder password. (Needs to be more secure. Maybe user Secrets Manager?)
+    Type: String
 
 Resources: 
   rdsDBInstance:
