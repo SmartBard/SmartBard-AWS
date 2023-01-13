@@ -32,6 +32,6 @@ jobs:
         id: s3-bucket
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3 
         with:
-          capabilities: CAPABILITY_IAM
+          capabilities: CAPABILITY_NAMED_IAM
           name: IAMRole
           template: cfn-stacks/iam.yaml
