@@ -13,5 +13,3 @@ Resources:
       ImageId: !Ref LatestAmiId
       InstanceType: t3.small
       Monitoring: true
-      SecurityGroupIds: 
-       - sg-id
