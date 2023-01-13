@@ -7,14 +7,22 @@ Parameters:
     Type: String
 
   DBUser:
-    Default: temp-user
-    Description: Placeholder user name (will need to be changed later)
+    NoEcho: 'true'
+    Description: The database admin account username
     Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: Alphanumeric characters
 
   DBPassword:
-    Default: temp-password
-    Description: Placeholder password. (Needs to be more secure. Maybe user Secrets Manager?)
+    NoEcho: 'true'
+    Description: The database admin account password
     Type: String
+    MinLength: '1'
+    MaxLength: '41'
+    AllowedPattern: '[a-zA-Z0-9]+'
+    ConstraintDescription: Alphanumeric characters
 
 Resources: 
   rdsDBInstance:
