@@ -1,11 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard EC2 Cloudformation Template
 
-Parameters: 
-  LatestAmiId:
-    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
-
 Resources: 
   VPC:
     Type: AWS::EC2::VPC
@@ -15,10 +10,17 @@ Resources:
       EnableDnsHostnames: false
       InstanceTenancy: default
 
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1
+      VpcId: !GetAtt VPC.VpcID
+      CidrBlock: 10.0.0.0/16
+
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref LatestAmiId
+      ImageId: ami-0ff8a91507f77f867
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
