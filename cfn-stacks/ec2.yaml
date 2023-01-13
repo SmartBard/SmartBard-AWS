@@ -2,15 +2,26 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard EC2 Cloudformation Template
 
 Parameters: 
+  LatestAmiId:
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
 
 Resources: 
-  myEC2Instance:
+  EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      KeyName: 
-      DisableApiTermination: 
-      ImageId: 
-      InstanceType: 
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
-        - sg-ids
+        - InstanceSecurityGroup
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref 'SSHLocation'
