@@ -1,44 +1,42 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard Database Cloudformation Template
 Parameters: 
+  DBName: 
+    Default: smbd-db
+    Description: RDS Database Storing SmartBard Announcement and User Data
+    Type: String
 
-Mappings: 
+  DBUser:
+    Default: temp-user
+    Description: Placeholder user name (will need to be changed later)
+    Type: String
 
-Conditions: 
+  DBPassword:
+    Default: temp-password
+    Description: Placeholder password. (Needs to be more secure. Maybe user Secrets Manager?)
 
 Resources: 
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: 
-      DBInstanceClass: 
-      AllowMajorVersionUpgrade: true|false
-      AutoMinorVersionUpgrade: true|false
-      AvailabilityZone: 
-      BackupRetentionPeriod: 
-      CharacterSetName: 
-      DBInstanceIdentifier: 
-      DBName: 
-      DBParameterGroupName: 
+      AllocatedStorage: 5
+      DBInstanceClass: db.t2.small	
+      AllowMajorVersionUpgrade: true
+      AutoMinorVersionUpgrade: true
+      AvailabilityZone: us-east-1
+      BackupRetentionPeriod: 7
+      DBName: !Ref DBName
       DBSecurityGroups: 
         - db-sg-group
-      DBSnapshotIdentifier: 
-      DBSubnetGroupName: 
-      Engine: mysql
-      EngineVersion: 
-      Iops: 
-      KmsKeyId: 
-      LicenseModel: 
-      MasterUsername: 
-      MasterUserPassword: 
+      Engine: postgres
+      EngineVersion: 15.1
+      MasterUsername: !Ref DBUser
+      MasterUserPassword: !Ref DBPassword
       MultiAZ: true
-      OptionGroupName: 
-      Port: 
-      PreferredBackupWindow: 
-      PreferredMaintenanceWindow: 
+      Port: 5432
       PubliclyAccessible: false
-      SourceDBInstanceIdentifier: 
       StorageEncrypted: true
-      StorageType: 
+      StorageType: db.t2.small
       VPCSecurityGroups:
         - vpc-sg-id
+    DeletionPolicy: Snapshot

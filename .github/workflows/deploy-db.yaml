@@ -14,7 +14,7 @@ on:
 
 
 jobs:
-  ec2-cfn-deployment:
+  db-cfn-deployment:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
