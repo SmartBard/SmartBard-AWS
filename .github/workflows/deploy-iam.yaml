@@ -14,7 +14,7 @@ on:
 
 
 jobs:
-  s3-cfn-deployment:
+  iam-cfn-deployment:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,8 @@ jobs:
 
       - name: Deploy IAM Roles CloudFormation Stack
         id: s3-bucket
-        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3 
         with:
+          capabilities: CAPABILITY_IAM
           name: IAMRole
           template: cfn-stacks/iam.yaml
