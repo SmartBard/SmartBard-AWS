@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: SmartBard IAM Role Cloudformation Template
+
+Parameters: 
+  IAMRoleName: 
+    Description: General IAM Role for SmartBard
+    Type: String
+    Default: SMBDGeneralRole
+
+Resources: 
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - rds.amazonaws.com
+                - s3.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+
+      Policies:
+        - 
+         PolicyName: "root"
+         PolicyDocument:
+           Version: "2012-10-17"
+           Statement:
+              - 
+                Effect: "Allow"
+                Action: "*"
+                Resource: "*"
