@@ -33,10 +33,17 @@ Resources:
       EnableDnsHostnames: false
       InstanceTenancy: default
 
-  Subnet:
+  SubnetA:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: us-east-1a
+      VpcId: !GetAtt VPC.VpcId
+      CidrBlock: 10.0.0.0/16
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1b
       VpcId: !GetAtt VPC.VpcId
       CidrBlock: 10.0.0.0/16
 
@@ -44,7 +51,7 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: Database subnet group
-      SubnetIds: !Split [',', !Ref Subnet]
+      SubnetIds: !Split [',', [!Ref SubnetA, !Ref SubnetB]]
 
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
