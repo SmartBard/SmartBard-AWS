@@ -1,10 +1,6 @@
 name: Deploy S3 Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - 'cfn-stacks/s3.yaml'
-
   workflow_dispatch:
     inputs:
       region:
@@ -14,8 +10,9 @@ on:
 
 
 jobs:
-  s3-cfn-deployment:
+  s3-cfn-test-deployment:
     runs-on: ubuntu-latest
+    environment: Test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,5 +29,32 @@ jobs:
         id: s3-bucket
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: S3Bucket
+          name: smbd-bucket
           template: cfn-stacks/s3.yaml
+          parameter-overrides: "Environment=-Test"
+          no-fail-on-empty-changeset: "1"
+
+
+  s3-cfn-prod-deployment:
+    runs-on: ubuntu-latest
+    environment: Prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: Deploy S3 Buckets CloudFormation Stacks
+        id: s3-bucket
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name: smbd-bucket
+          template: cfn-stacks/s3.yaml
+          parameter-overrides: "Environment=-Prod"
+          no-fail-on-empty-changeset: "1"
