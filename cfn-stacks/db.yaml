@@ -51,7 +51,7 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: Database subnet group
-      SubnetIds: !Split [',', !Flatten [!Ref SubnetA, !Ref SubnetB]]
+      SubnetIds: [!Ref SubnetA, !Ref SubnetB]
 
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
