@@ -7,7 +7,7 @@ Parameters:
     Type: String
 
   DBUser:
-    Default: tempUser
+    Default: postgres
     Description: The database admin account username
     Type: String
     MinLength: '1'
@@ -17,7 +17,7 @@ Parameters:
 
   DBPassword:
     Default: tempPWD
-    Description: The database admin account password (will need to changed for security later. Secrets Manager?)
+    Description: The database admin account password (will need to decide where to store pwd for security later)
     Type: String
     MinLength: '1'
     MaxLength: '41'
@@ -25,27 +25,47 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
 Resources: 
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access via port 80 and SSH access
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+
+  DBEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open database for access
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 3306
+        ToPort: 3306
+        SourceSecurityGroupName:
+          Ref: WebServerSecurityGroup
+
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 5
-      DBInstanceClass: db.t2.small	
-      AllowMajorVersionUpgrade: true
-      AutoMinorVersionUpgrade: true
+      DBInstanceClass: db.t3.small	
+      DBName: !Ref DBName
       AvailabilityZone: us-east-1
       BackupRetentionPeriod: 7
-      DBName: !Ref DBName
-      DBSecurityGroups: 
-        - db-sg-group
-      Engine: postgres
-      EngineVersion: 15.1
+      Engine: PostgresSQL
+      EngineVersion: 14.5
       MasterUsername: !Ref DBUser
       MasterUserPassword: !Ref DBPassword
       MultiAZ: true
       Port: 5432
       PubliclyAccessible: false
       StorageEncrypted: true
-      StorageType: db.t2.small
       VPCSecurityGroups:
-        - vpc-sg-id
+      - !GetAtt DBEC2SecurityGroup.GroupId
     DeletionPolicy: Snapshot
