@@ -2,8 +2,12 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard S3 Cloudformation Template
 
 Parameters: 
+  Environment:
+    Default: ''
+    Description: Env Suffix
+    Type: String
   BucketName: 
-    Default: smbd-s3
+    Default: !Sub smbd-s3${Environment}
     Description: Bucket Storing SmartBard Announcement and User Data
     Type: String
 
