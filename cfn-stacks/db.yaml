@@ -40,11 +40,18 @@ Resources:
       VpcId: !GetAtt VPC.VpcId
       CidrBlock: 10.0.0.0/16
 
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Database subnet group
+      SubnetIds: !Ref Subnet
+
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 5
       DBInstanceClass: db.t3.small	
+      DBSubnetGroupName: !Ref DBSubnetGroup
       DBName: !Ref DBName
       AvailabilityZone: us-east-1
       BackupRetentionPeriod: 7
