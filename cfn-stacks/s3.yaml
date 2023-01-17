@@ -6,10 +6,6 @@ Parameters:
     Default: Test
     Description: Env Suffix
     Type: String
-  BucketName: 
-    Default: smbd-s3$
-    Description: Bucket Storing SmartBard Announcement and User Data
-    Type: String
 
 Resources: 
   S3Bucket:
@@ -27,7 +23,7 @@ Resources:
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref S3Bucket
+      Bucket: !Sub smbd-bucket${Environment}
       PolicyDocument: 
         Version: 2012-10-17
         Statement:
