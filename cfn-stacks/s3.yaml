@@ -3,7 +3,6 @@ Description: SmartBard S3 Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: ''
     Description: Env Suffix
     Type: String
   BucketName: 
