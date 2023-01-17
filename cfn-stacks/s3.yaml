@@ -3,7 +3,7 @@ Description: SmartBard S3 Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: test
+    Default: testtest
     Description: Env Suffix
     Type: String
 
