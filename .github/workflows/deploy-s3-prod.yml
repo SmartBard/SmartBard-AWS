@@ -9,9 +9,10 @@ on:
         default: 'us-east-1'
 
 jobs:
-  s3-cfn-test-deployment:
+
+  s3-cfn-prod-deployment:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: Prod
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,7 +29,7 @@ jobs:
         id: s3-bucket
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-bucket-test
+          name: smbd-bucket-prod
           template: cfn-stacks/s3.yaml
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"
