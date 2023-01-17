@@ -28,9 +28,9 @@ jobs:
         id: s3-bucket
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-bucket
+          name: smbd-bucket-test
           template: cfn-stacks/s3.yaml
-          parameter-overrides: "Environment=-Test"
+          # parameter-overrides: "Environment=-Test"
           no-fail-on-empty-changeset: "1"
 
 
@@ -53,7 +53,7 @@ jobs:
         id: s3-bucket
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-bucket
+          name: smbd-bucket-prod
           template: cfn-stacks/s3.yaml
-          parameter-overrides: "Environment=-Prod"
+          # parameter-overrides: "Environment=-Prod"
           no-fail-on-empty-changeset: "1"

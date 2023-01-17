@@ -3,10 +3,11 @@ Description: SmartBard S3 Cloudformation Template
 
 Parameters: 
   Environment:
+    Default: ""
     Description: Env Suffix
     Type: String
   BucketName: 
-    Default: !Sub smbd-s3${Environment}
+    Default: !Sub smbd-s3
     Description: Bucket Storing SmartBard Announcement and User Data
     Type: String
 
