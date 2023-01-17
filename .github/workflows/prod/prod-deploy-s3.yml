@@ -1,9 +1,6 @@
-name: Deploy S3 Cloudformation Stack
+name: PROD - Deploy S3 Cloudformation Stack
 
 on:
-  push: 
-    paths: 
-      - cfn-stacks/s3.yaml
   workflow_dispatch:
     inputs:
       region:
