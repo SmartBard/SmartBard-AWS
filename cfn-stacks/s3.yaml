@@ -12,7 +12,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: Private
-      BucketName: !Ref BucketName
+      BucketName: !Sub smbd-bucket${Environment}
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -33,5 +33,5 @@ Resources:
               - 's3:List*'
             Effect: Allow
             Resource: 
-              - !Sub "arn:aws:s3:::${BucketName}/*"
+              - !Sub "arn:aws:s3:::smbd-bucket${Environment}/*"
             Principal: '*'
