@@ -1,6 +1,10 @@
 name: TEST - Deploy S3 Cloudformation Stack
 
 on:
+  push:
+    paths:
+      - cfn-stacks/s3.yaml
+
   workflow_dispatch:
     inputs:
       region:
