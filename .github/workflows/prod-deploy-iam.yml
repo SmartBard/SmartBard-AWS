@@ -1,17 +1,12 @@
 name: PROD - Deploy IAM Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - 'cfn-stacks/iam.yaml'
-
   workflow_dispatch:
     inputs:
       region:
         description: 'AWS Region to deploy to'
         required: true
         default: 'us-east-1'
-
 
 jobs:
   iam-cfn-prod-deployment:
