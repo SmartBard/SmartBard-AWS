@@ -11,10 +11,6 @@ Resources:
   IAMRole:
     Type: AWS::IAM::Role
     Properties:
-      Capabilities: 
-        - CAPABILITY_IAM
-        - CAPABILITY_NAMED_IAM
-      RoleName: !Sub smbd-iam-role${Environment}
       AssumeRolePolicyDocument: 
         Version: '2012-10-17'
         Statement:
@@ -37,4 +33,3 @@ Resources:
                 Effect: "Allow"
                 Action: "*"
                 Resource: "*"
-  
