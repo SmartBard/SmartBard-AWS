@@ -1,10 +1,6 @@
 name: PROD - Deploy Postgres Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - 'cfn-stacks/db.yaml'
-
   workflow_dispatch:
     inputs:
       region:
