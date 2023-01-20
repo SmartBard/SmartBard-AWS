@@ -25,11 +25,40 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
 Resources: 
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: false
+      EnableDnsHostnames: false
+      InstanceTenancy: default
+
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      VpcId: !GetAtt VPC.VpcId
+      CidrBlock: 10.0.0.0/24
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1b
+      VpcId: !GetAtt VPC.VpcId
+      CidrBlock: 10.0.8.0/24
+
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Database subnet group
+      SubnetIds: [!Ref SubnetA, !Ref SubnetB]
+
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 100
       DBInstanceClass: db.t3.micro
+      DBSubnetGroupName: !Ref DBSubnetGroup
       AvailabilityZone: us-east-1
       BackupRetentionPeriod: 7
       Engine: postgres
@@ -40,4 +69,6 @@ Resources:
       Port: 5432
       PubliclyAccessible: false
       StorageEncrypted: true
+      VPCSecurityGroups:        
+        - !GetAtt VPC.DefaultSecurityGroup
     DeletionPolicy: Snapshot
