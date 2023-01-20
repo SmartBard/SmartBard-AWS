@@ -1,4 +1,4 @@
-name: Deploy IAM Cloudformation Stack
+name: TEST - Deploy IAM Cloudformation Stack
 
 on:
   push:
@@ -14,8 +14,9 @@ on:
 
 
 jobs:
-  iam-cfn-deployment:
+  iam-cfn-test-deployment:
     runs-on: ubuntu-latest
+    environment: Test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,8 +30,10 @@ jobs:
           aws-region: "us-east-1"
 
       - name: Deploy IAM Roles CloudFormation Stack
-        id: s3-bucket
+        id: iam-role
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3 
         with:
-          name: IAMRole
+          name: smbd-iam-test
           template: cfn-stacks/iam.yaml
+          parameter-overrides: "Environment=-test"
+          no-fail-on-empty-changeset: "1"
