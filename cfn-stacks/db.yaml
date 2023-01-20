@@ -16,7 +16,7 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
   DBPassword:
-    Default: tempPWD
+    Default: postgres
     Description: The database admin account password (will need to decide where to store pwd for security later)
     Type: String
     MinLength: '1'
