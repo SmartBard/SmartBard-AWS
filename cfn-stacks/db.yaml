@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard Database Cloudformation Template
 Parameters: 
+  Environment:
+    Default: test
+    Description: Env Suffix for SMBD Bucket
+    Type: String
+
   DBUser:
     Default: postgres
     Description: The database admin account username
