@@ -59,7 +59,7 @@ Resources:
       AllocatedStorage: 100
       DBInstanceClass: db.t3.micro
       DBSubnetGroupName: !Ref DBSubnetGroup
-      AvailabilityZone: us-east-1
+      AvailabilityZone: us-east-1b
       BackupRetentionPeriod: 7
       Engine: postgres
       EngineVersion: 14.5
