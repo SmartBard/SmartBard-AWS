@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard Database Cloudformation Template
 Parameters: 
-  DBName: 
-    Default: smbdDB
-    Description: RDS Database Storing SmartBard Announcement and User Data
+  Environment:
+    Default: test
+    Description: Env Suffix for SMBD Bucket
     Type: String
 
   DBUser:
-    Default: tempUser
+    Default: postgres
     Description: The database admin account username
     Type: String
     MinLength: '1'
@@ -16,8 +16,8 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
   DBPassword:
-    Default: tempPWD
-    Description: The database admin account password (will need to changed for security later. Secrets Manager?)
+    Default: postgres
+    Description: The database admin account password (will need to decide where to store pwd for security later)
     Type: String
     MinLength: '1'
     MaxLength: '41'
@@ -25,27 +25,50 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
 Resources: 
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: false
+      EnableDnsHostnames: false
+      InstanceTenancy: default
+
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      VpcId: !GetAtt VPC.VpcId
+      CidrBlock: 10.0.0.0/24
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1b
+      VpcId: !GetAtt VPC.VpcId
+      CidrBlock: 10.0.8.0/24
+
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Database subnet group
+      SubnetIds: [!Ref SubnetA, !Ref SubnetB]
+
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: 5
-      DBInstanceClass: db.t2.small	
-      AllowMajorVersionUpgrade: true
-      AutoMinorVersionUpgrade: true
-      AvailabilityZone: us-east-1
+      AllocatedStorage: 100
+      DBInstanceClass: db.t3.micro
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      AvailabilityZone: us-east-1b
       BackupRetentionPeriod: 7
-      DBName: !Ref DBName
-      DBSecurityGroups: 
-        - db-sg-group
       Engine: postgres
-      EngineVersion: 15.1
+      EngineVersion: 14.5
       MasterUsername: !Ref DBUser
       MasterUserPassword: !Ref DBPassword
-      MultiAZ: true
+      MultiAZ: false
       Port: 5432
       PubliclyAccessible: false
       StorageEncrypted: true
-      StorageType: db.t2.small
-      VPCSecurityGroups:
-        - vpc-sg-id
+      VPCSecurityGroups:        
+        - !GetAtt VPC.DefaultSecurityGroup
     DeletionPolicy: Snapshot

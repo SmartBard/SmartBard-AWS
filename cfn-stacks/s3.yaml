@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard S3 Cloudformation Template
 
 Parameters: 
-  BucketName: 
-    Default: smbd-s3
-    Description: Bucket Storing SmartBard Announcement and User Data
+  Environment:
+    Default: test
+    Description: Env Suffix for SMBD Bucket
     Type: String
 
 Resources: 
@@ -12,7 +12,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: Private
-      BucketName: !Ref BucketName
+      BucketName: !Sub smbd-bucket${Environment}
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -23,7 +23,7 @@ Resources:
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref S3Bucket
+      Bucket: !Sub smbd-bucket${Environment}
       PolicyDocument: 
         Version: 2012-10-17
         Statement:
@@ -33,5 +33,5 @@ Resources:
               - 's3:List*'
             Effect: Allow
             Resource: 
-              - !Sub "arn:aws:s3:::${BucketName}/*"
+              - !Sub "arn:aws:s3:::smbd-bucket${Environment}/*"
             Principal: '*'

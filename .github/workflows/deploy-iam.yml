@@ -1,9 +1,9 @@
-name: TEST - Deploy S3 Cloudformation Stack
+name: TEST - Deploy IAM Cloudformation Stack
 
 on:
   push:
     paths:
-      - cfn-stacks/s3.yaml
+      - 'cfn-stacks/iam.yaml'
 
   workflow_dispatch:
     inputs:
@@ -12,8 +12,9 @@ on:
         required: true
         default: 'us-east-1'
 
+
 jobs:
-  s3-cfn-test-deployment:
+  iam-cfn-test-deployment:
     runs-on: ubuntu-latest
     environment: Test
     steps:
@@ -28,11 +29,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      - name: Deploy S3 Buckets CloudFormation Stacks
-        id: s3-bucket
-        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+      - name: Deploy IAM Roles CloudFormation Stack
+        id: iam-role
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3 
         with:
-          name: smbd-bucket-test
-          template: cfn-stacks/s3.yaml
+          name: smbd-iam-test
+          template: cfn-stacks/iam.yaml
           parameter-overrides: "Environment=-test"
           no-fail-on-empty-changeset: "1"

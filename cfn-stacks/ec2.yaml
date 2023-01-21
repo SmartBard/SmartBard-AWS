@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard EC2 Cloudformation Template
 
+Parameters: 
+  Environment:
+    Default: test
+    Description: Env Suffix for SMBD IAM Role
+    Type: String
+
 Resources: 
   VPC:
     Type: AWS::EC2::VPC

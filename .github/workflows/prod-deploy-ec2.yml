@@ -1,10 +1,6 @@
-name: TEST - Deploy S3 Cloudformation Stack
+name: PROD - Deploy EC2 Cloudformation Stack
 
-on:
-  push:
-    paths:
-      - cfn-stacks/s3.yaml
-
+on:  
   workflow_dispatch:
     inputs:
       region:
@@ -13,9 +9,9 @@ on:
         default: 'us-east-1'
 
 jobs:
-  s3-cfn-test-deployment:
+  ec2-cfn-prod-deployment:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: Prod
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,11 +24,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      - name: Deploy S3 Buckets CloudFormation Stacks
-        id: s3-bucket
+      - name: Deploy Instances
+        id: ec2-instance
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-bucket-test
-          template: cfn-stacks/s3.yaml
-          parameter-overrides: "Environment=-test"
+          name: smbd-ec2-prod
+          template: cfn-stacks/ec2.yaml
+          parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"
