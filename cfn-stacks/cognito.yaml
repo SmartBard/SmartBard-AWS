@@ -13,10 +13,6 @@ Resources:
     Properties:
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true
-        InviteMessageTemplate: 
-          EmailMessage: "Temp - User Account Created..."
-          EmailSubject: "Temp - User Account Creation"
-          SMSMessage: "Temp - User Account Created..."
       DeviceConfiguration:
         DeviceOnlyRememberedOnUserPrompt: true
       UsernameConfiguration: 
