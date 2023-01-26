@@ -29,7 +29,7 @@ jobs:
           aws-region: "us-east-1"
 
       - name: Deploy AWS Cognito CloudFormation Stacks
-        id: s3-bucket
+        id: smbd-cognito
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
           name: smbd-cognito-test
