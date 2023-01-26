@@ -64,10 +64,10 @@ Outputs:
     Description: Role Arn of Admin Role
     Value: !GetAtt IAMRoleAdmin.Arn
     Export:
-      Name: !Sub AdminRoleArn${Environment2}
+      Name: !Sub AdminRoleArn${Environment}
   
   StudentRoleArn:
     Description: Role Arn of Student Role
     Value: !GetAtt IAMRoleStudent.Arn
     Export:
-      Name: !Sub StudentRoleArn${Environment2}
+      Name: !Sub StudentRoleArn${Environment}
