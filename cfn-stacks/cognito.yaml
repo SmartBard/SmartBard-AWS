@@ -46,5 +46,12 @@ Resources:
         - profile
       SupportedIdentityProviders:
         - COGNITO
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub cognito-${Environment}-domain.smbd.com
+      UserPoolId: !Ref UserPool
+
       
 
