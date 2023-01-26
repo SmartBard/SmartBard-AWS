@@ -6,7 +6,7 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD Bucket
     Type: String
-  
+
 Resources: 
   UserPool:
     Type: AWS::Cognito::UserPool
@@ -58,7 +58,9 @@ Resources:
     Properties: 
       Description: Group of users with Admin permissions
       GroupName: Admins
-      RoleArn: !Sub arn:aws:iam::013130384093:role/smbd-iam${Environment}-IAMRoleAdmin-*
+      RoleArn:
+        Fn::ImportValue:
+          !Sub "AdminRoleArn${Environment}"
       UserPoolId: !Ref UserPool
 
   UserPoolGroupStudents:
@@ -66,7 +68,9 @@ Resources:
     Properties: 
       Description: Group of users with student permissions
       GroupName: Students
-      RoleArn: !Sub arn:aws:iam::013130384093:role/smbd-iam${Environment}-IAMRoleStudent-*
+      RoleArn:
+        Fn::ImportValue:
+          !Sub "StudentRoleArn${Environment}"
       UserPoolId: !Ref UserPool
 
 
