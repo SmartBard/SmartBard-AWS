@@ -59,3 +59,16 @@ Resources:
                 Effect: "Allow"
                 Action: "*"
                 Resource: "*"
+
+Outputs:
+  AdminRoleArn:
+    Description: Role Arn of Admin Role
+    Value: !Ref IAMRoleAdmin
+    Export:
+      Name: AdminRoleArn
+  
+  StudentRoleArn:
+    Description: Role Arn of Student Role
+    Value: !Ref IAMRoleStudent
+    Export:
+      Name: !Sub StudentRoleArn
