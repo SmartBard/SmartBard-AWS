@@ -16,13 +16,15 @@ Resources:
       AutoVerifiedAttributes:
         - email
       UserPoolName: !Sub smbd-user-pool${Environment}
-      PasswordPolicy:
-        MinimumLength: 6
-        RequireLowercase: true
-        RequireNumbers: true
-        RequireSymbols: true
-        RequireUppercase: true
-        TemporaryPasswordValidityDays: 7
+      MfaConfiguration: "ON"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
 
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
