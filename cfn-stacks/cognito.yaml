@@ -50,7 +50,7 @@ Resources:
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: !Sub cognito-${Environment}-domain.smbd.com
+      Domain: !Sub smbd${Environment}
       UserPoolId: !Ref UserPool
 
       
