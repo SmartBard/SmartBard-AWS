@@ -8,7 +8,33 @@ Parameters:
     Type: String
 
 Resources: 
-  IAMRole:
+  IAMRoleAdmin:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - rds.amazonaws.com
+                - s3.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+
+      Policies:
+        - 
+         PolicyName: "root"
+         PolicyDocument:
+           Version: "2012-10-17"
+           Statement:
+              - 
+                Effect: "Allow"
+                Action: "*"
+                Resource: "*"
+
+  IAMRoleStudent:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument: 
