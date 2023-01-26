@@ -15,6 +15,7 @@ Resources:
         CaseSensitive: false
       AutoVerifiedAttributes:
         - email
+        - phone_number
       UserPoolName: !Sub smbd-user-pool${Environment}
       MfaConfiguration: "ON"
       Policies:
