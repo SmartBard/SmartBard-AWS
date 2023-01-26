@@ -11,7 +11,7 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      AllowAdminCreateUserOnly:
+      AdminCreateUser:
         AllowAdminCreateUserOnly: true
         InviteMessageTemplate: 
           EmailMessage: "Temp - User Account Created..."
