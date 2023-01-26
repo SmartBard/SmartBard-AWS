@@ -6,11 +6,6 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD IAM Role
     Type: String
-  Environment2:
-    Default: test
-    Description: Env Suffix for SMBD IAM Role
-    Type: String
-
 Resources: 
   IAMRoleAdmin:
     Type: AWS::IAM::Role
@@ -69,7 +64,7 @@ Outputs:
     Description: Role Arn of Admin Role
     Value: !GetAtt IAMRoleAdmin.Arn
     Export:
-      Name: AdminRoleArn${Environment2}
+      Name: !Sub AdminRoleArn${Environment2}
   
   StudentRoleArn:
     Description: Role Arn of Student Role
