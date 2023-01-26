@@ -1,6 +1,9 @@
-name: PROD - Deploy IAM Cloudformation Stack
+name: PROD - Deploy Cognito Cloudformation Stack
 
 on:
+  push:
+    paths:
+      - "cfn-stacks/cognito.yaml"
   workflow_dispatch:
     inputs:
       region:
@@ -9,7 +12,8 @@ on:
         default: 'us-east-1'
 
 jobs:
-  iam-cfn-prod-deployment:
+
+  cognito-cfn-prod-deployment:
     runs-on: ubuntu-latest
     environment: Prod
     steps:
@@ -24,11 +28,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      - name: Deploy IAM Roles CloudFormation Stack
-        id: iam-role
-        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3 
+      - name: Deploy AWS Cognito CloudFormation Stacks
+        id: s3-bucket
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-iam-prod
-          template: cfn-stacks/iam.yaml
+          name: smbd-cognito-prod
+          template: cfn-stacks/cognito.yaml
           parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"
