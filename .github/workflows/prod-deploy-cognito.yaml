@@ -1,9 +1,6 @@
 name: PROD - Deploy Cognito Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - "cfn-stacks/cognito.yaml"
   workflow_dispatch:
     inputs:
       region:
