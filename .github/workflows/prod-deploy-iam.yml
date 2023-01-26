@@ -1,6 +1,10 @@
 name: PROD - Deploy IAM Cloudformation Stack
 
 on:
+  push:
+    paths:
+      - 'cfn-stacks/iam.yaml'
+
   workflow_dispatch:
     inputs:
       region:
