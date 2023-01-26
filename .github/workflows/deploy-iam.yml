@@ -35,5 +35,5 @@ jobs:
         with:
           name: smbd-iam-test
           template: cfn-stacks/iam.yaml
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-test,Environment2=Test"
           no-fail-on-empty-changeset: "1"
