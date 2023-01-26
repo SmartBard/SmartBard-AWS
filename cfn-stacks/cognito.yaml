@@ -53,5 +53,22 @@ Resources:
       Domain: !Sub smbd${Environment}
       UserPoolId: !Ref UserPool
 
+  UserPoolGroupAdmins:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: 
+      Description: Group of users with Admin permissions
+      GroupName: Admins
+      RoleArn: !Sub smbd-iam${Environment}-IAMRoleAdmin-*
+      UserPoolId: !Ref UserPool
+
+  UserPoolGroupStudents:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: 
+      Description: Group of users with student permissions
+      GroupName: Students
+      RoleArn: !Sub smbd-iam${Environment}-IAMRoleStudent-*
+      UserPoolId: !Ref UserPool
+
+
       
 
