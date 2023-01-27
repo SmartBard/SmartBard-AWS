@@ -6,9 +6,8 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD IAM Role
     Type: String
-
 Resources: 
-  IAMRole:
+  IAMRoleAdmin:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument: 
@@ -33,3 +32,42 @@ Resources:
                 Effect: "Allow"
                 Action: "*"
                 Resource: "*"
+
+  IAMRoleStudent:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - rds.amazonaws.com
+                - s3.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+
+      Policies:
+        - 
+         PolicyName: "root"
+         PolicyDocument:
+           Version: "2012-10-17"
+           Statement:
+              - 
+                Effect: "Allow"
+                Action: "*"
+                Resource: "*"
+
+Outputs:
+  AdminRoleArn:
+    Description: Role Arn of Admin Role
+    Value: !GetAtt IAMRoleAdmin.Arn
+    Export:
+      Name: !Sub AdminRoleArn${Environment}
+  
+  StudentRoleArn:
+    Description: Role Arn of Student Role
+    Value: !GetAtt IAMRoleStudent.Arn
+    Export:
+      Name: !Sub StudentRoleArn${Environment}

@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: SmartBard Cognito Cloudformation Template
+
+Parameters: 
+  Environment:
+    Default: test
+    Description: Env Suffix for AWS Cognito
+    Type: String
+
+Resources: 
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      DeviceConfiguration:
+        DeviceOnlyRememberedOnUserPrompt: true
+      UsernameConfiguration: 
+        CaseSensitive: false
+      AutoVerifiedAttributes:
+        - email
+      UserPoolName: !Sub smbd-user-pool${Environment}
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - http://localhost:3000
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - openid
+        - profile
+      SupportedIdentityProviders:
+        - COGNITO
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub smbd${Environment}
+      UserPoolId: !Ref UserPool
+
+  UserPoolGroupAdmins:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: 
+      Description: Group of users with Admin permissions
+      GroupName: Admins
+      RoleArn:
+        Fn::ImportValue:
+          !Sub "AdminRoleArn${Environment}"
+      UserPoolId: !Ref UserPool
+
+  UserPoolGroupStudents:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: 
+      Description: Group of users with student permissions
+      GroupName: Students
+      RoleArn:
+        Fn::ImportValue:
+          !Sub "StudentRoleArn${Environment}"
+      UserPoolId: !Ref UserPool
+
+
+      
+
