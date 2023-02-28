@@ -16,7 +16,7 @@ Resources:
       Monitoring: true
       SecurityGroupIds:
         Fn::ImportValue:
-          !Sub "VPC${Environment}.DefaultSecurityGroup"
+          !Sub "DefaultSecurityGroup${Environment}"
       SubnetId:
         Fn::ImportValue:
           !Sub "SubnetA${Environment}"
