@@ -32,7 +32,7 @@ jobs:
         id: vpc-subnets
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-vpc
+          name: smbd-vpc-test
           template: cfn-stacks/vpc.yaml
           parameter-overrides: "Environment=-test"
           no-fail-on-empty-changeset: "1"
