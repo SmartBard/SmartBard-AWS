@@ -4,25 +4,10 @@ Description: SmartBard EC2 Cloudformation Template
 Parameters: 
   Environment:
     Default: test
-    Description: Env Suffix for SMBD IAM Role
+    Description: Env Suffix for SMBD EC2 Server
     Type: String
 
 Resources: 
-  VPC:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsSupport: false
-      EnableDnsHostnames: false
-      InstanceTenancy: default
-
-  Subnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: us-east-1a
-      VpcId: !GetAtt VPC.VpcId
-      CidrBlock: 10.0.0.0/16
-
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -30,5 +15,11 @@ Resources:
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
-        - !GetAtt VPC.DefaultSecurityGroup
-      SubnetId: !Ref Subnet
+        - Fn::ImportValue:
+            !Sub "DefaultSecurityGroup${Environment}"
+      SubnetId:
+        Fn::ImportValue:
+          !Sub "SubnetA${Environment}"
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-ec2${Environment}

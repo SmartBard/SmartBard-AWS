@@ -1,10 +1,6 @@
-name: TEST - Deploy EC2 Cloudformation Stack
+name: PROD - Deploy VPC Cloudformation Stack
 
-on:  
-  push:
-    paths:
-      - 'cfn-stacks/ec2.yaml'
-
+on:
   workflow_dispatch:
     inputs:
       region:
@@ -13,9 +9,10 @@ on:
         default: 'us-east-1'
 
 jobs:
-  ec2-cfn-test-deployment:
+
+  vpc-cfn-prod-deployment:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: Prod
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,11 +25,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
 
-      - name: Deploy Instances
-        id: ec2-instance
+      - name: Deploy VPC CloudFormation Stacks
+        id: vpc-subnets
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smbd-ec2-test
-          template: cfn-stacks/ec2.yaml
-          parameter-overrides: "Environment=-test"
+          name: smbd-vpc-prod
+          template: cfn-stacks/vpc.yaml
+          parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"
