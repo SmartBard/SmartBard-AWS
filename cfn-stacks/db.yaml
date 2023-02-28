@@ -55,12 +55,11 @@ Resources:
         - Key: Name
           Value: !Sub smbd-db-subnet-group${Environment}
 
-  rdsDBInstance:
+  DBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 100
       DBInstanceClass: db.t3.micro
-      DBInstanceIdentifier: smbd-dbinstance${Environment}
       DBSubnetGroupName: !Ref DBSubnetGroup
       AvailabilityZone: us-east-1b
       BackupRetentionPeriod: 7
