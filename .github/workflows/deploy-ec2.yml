@@ -32,7 +32,7 @@ jobs:
         id: ec2-instance
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: smnd-ec2-test
+          name: smbd-ec2-test
           template: cfn-stacks/ec2.yaml
           parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"

@@ -15,8 +15,8 @@ Resources:
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
-        Fn::ImportValue:
-          !Sub "DefaultSecurityGroup${Environment}"
+        - Fn::ImportValue:
+            !Sub "DefaultSecurityGroup${Environment}"
       SubnetId:
         Fn::ImportValue:
           !Sub "SubnetA${Environment}"
