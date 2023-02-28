@@ -23,22 +23,3 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub smbd-ec2${Environment}
-
-  StackPolicy:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: 
-      StackPolicyBody:
-        Statement:
-        - Effect: Allow
-          Action:
-            - Update:*
-            - CloudFormation:ContinueUpdateRollback
-            - CloudFormation:UpdateStack
-          Principal: "*"
-          Resource: "*"
-          Condition:
-            StringEquals:
-              CloudFormation:StackStatus:
-                - UPDATE_ROLLBACK_COMPLETE
-                - UPDATE_ROLLBACK_FAILED
