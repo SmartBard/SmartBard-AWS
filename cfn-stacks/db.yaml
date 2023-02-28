@@ -37,6 +37,10 @@ Resources:
           FromPort: 5432
           ToPort: 5432
           CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-db-security-group${Environment}
+
 
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
@@ -47,12 +51,16 @@ Resources:
             !Sub "SubnetA${Environment}"
         - Fn::ImportValue:
             !Sub "SubnetB${Environment}"
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-db-subnet-group${Environment}
 
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 100
       DBInstanceClass: db.t3.micro
+      DBInstanceIdentifier: smbd-dbinstance${Environment}
       DBSubnetGroupName: !Ref DBSubnetGroup
       AvailabilityZone: us-east-1b
       BackupRetentionPeriod: 7
