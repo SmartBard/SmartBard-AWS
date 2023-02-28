@@ -1,0 +1,38 @@
+name: TEST - Deploy VPC Cloudformation Stack
+
+on:
+  push:
+    paths:
+      - cfn-stacks/vpc.yaml
+
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'AWS Region to deploy to'
+        required: true
+        default: 'us-east-1'
+
+jobs:
+  vpc-cfn-test-deployment:
+    runs-on: ubuntu-latest
+    environment: Test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: Deploy VPC CloudFormation Stacks
+        id: vpc-subnets
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name: smbd-vpc
+          template: cfn-stacks/vpc.yaml
+          parameter-overrides: "Environment=-test"
+          no-fail-on-empty-changeset: "1"
