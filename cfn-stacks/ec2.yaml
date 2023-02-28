@@ -4,7 +4,7 @@ Description: SmartBard EC2 Cloudformation Template
 Parameters: 
   Environment:
     Default: test
-    Description: Env Suffix for SMBD IAM Role
+    Description: Env Suffix for SMBD EC2 Server
     Type: String
 
 Resources: 
@@ -23,3 +23,19 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub smbd-ec2${Environment}
+    Metadata:
+      AWS::CloudFormation::StackPolicy:
+        Statement:
+        - Effect: Allow
+          Action:
+            - Update:*
+            - CloudFormation:ContinueUpdateRollback
+            - CloudFormation:UpdateStack
+          Principal: "*"
+          Resource: "*"
+          Condition:
+            StringEquals:
+              CloudFormation:StackStatus:
+                - UPDATE_ROLLBACK_COMPLETE
+                - UPDATE_ROLLBACK_FAILED
+

@@ -3,7 +3,7 @@ Description: SmartBard VPC Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: testt
+    Default: test
     Description: Env Suffix for SMBD VPC Group
     Type: String
 
