@@ -7,7 +7,7 @@ Parameters:
     Type: String
 
   DBUser:
-    Default: postgres
+    Default: smartbarduser
     Description: The database admin account username
     Type: String
     MinLength: '1'
@@ -16,7 +16,7 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
   DBPassword:
-    Default: postgres
+    Default: smartbarduser
     Description: The database admin account password (will need to decide where to store pwd for security later)
     Type: String
     MinLength: '1'
@@ -25,33 +25,28 @@ Parameters:
     ConstraintDescription: Alphanumeric characters
 
 Resources: 
-  VPC:
-    Type: AWS::EC2::VPC
+  DBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsSupport: false
-      EnableDnsHostnames: false
-      InstanceTenancy: default
-
-  SubnetA:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: us-east-1a
-      VpcId: !GetAtt VPC.VpcId
-      CidrBlock: 10.0.0.0/24
-
-  SubnetB:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: us-east-1b
-      VpcId: !GetAtt VPC.VpcId
-      CidrBlock: 10.0.8.0/24
+      GroupDescription: Allow access to database instance
+      VpcId:         
+        Fn::ImportValue:
+          !Sub "VPC${Environment}"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
 
   DBSubnetGroup:
-    Type: AWS::RDS::DBSubnetGroup
+    Type: 'AWS::RDS::DBSubnetGroup'
     Properties:
       DBSubnetGroupDescription: Database subnet group
-      SubnetIds: [!Ref SubnetA, !Ref SubnetB]
+      SubnetIds:
+        - Fn::ImportValue:
+            !Sub "SubnetA${Environment}"
+        - Fn::ImportValue:
+            !Sub "SubnetB${Environment}"
 
   rdsDBInstance:
     Type: AWS::RDS::DBInstance
@@ -67,8 +62,8 @@ Resources:
       MasterUserPassword: !Ref DBPassword
       MultiAZ: false
       Port: 5432
-      PubliclyAccessible: false
+      PubliclyAccessible: true
       StorageEncrypted: true
       VPCSecurityGroups:        
-        - !GetAtt VPC.DefaultSecurityGroup
+        - !Ref DBSecurityGroup
     DeletionPolicy: Snapshot
