@@ -20,3 +20,6 @@ Resources:
       SubnetId:
         Fn::ImportValue:
           !Sub "SubnetA${Environment}"
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-ec2${Environment}
