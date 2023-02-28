@@ -27,6 +27,7 @@ Resources:
   StackPolicy:
     Type: AWS::CloudFormation::Stack
     Properties:
+      TemplateURL: 
       StackPolicyBody:
         Statement:
         - Effect: Allow
