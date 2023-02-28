@@ -23,9 +23,9 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub smbd-ec2${Environment}
-  
+
   StackPolicy:
-    Type: AWS::CloudFormation::StackPolicy
+    Type: AWS::CloudFormation::Stack
     Properties:
       StackPolicyBody:
         Statement:
@@ -41,5 +41,3 @@ Resources:
               CloudFormation:StackStatus:
                 - UPDATE_ROLLBACK_COMPLETE
                 - UPDATE_ROLLBACK_FAILED
-      StackId:
-        !Ref 'AWS::StackId'
