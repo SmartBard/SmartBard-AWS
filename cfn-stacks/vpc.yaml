@@ -84,6 +84,12 @@ Outputs:
     Export:
       Name: !Sub VPC${Environment}
 
+  VpcDefaultSecurityGroup:
+    Description: A reference to the default security group of the created VPC
+    Value: !GetAtt VPC.DefaultSecurityGroup
+    Export:
+      Name: !Sub DefaultSecurityGroup${Environment}
+
   SubnetA:
     Description: A reference to the subnet in the 1st Availability Zone
     Value: !Ref SubnetA
