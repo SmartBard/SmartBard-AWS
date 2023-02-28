@@ -1,10 +1,6 @@
 name: PROD - Deploy VPC Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - cfn-stacks/vpc.yaml
-
   workflow_dispatch:
     inputs:
       region:
