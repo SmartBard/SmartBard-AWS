@@ -55,7 +55,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub smbd-route-table{Environment}
+          Value: !Sub smbd-route-table${Environment}
 
   DefaultRoute:
     Type: AWS::EC2::Route
