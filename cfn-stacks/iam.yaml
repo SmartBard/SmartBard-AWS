@@ -3,7 +3,7 @@ Description: SmartBard IAM Role Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: test
+    Default: testt
     Description: Env Suffix for SMBD IAM Role
     Type: String
 Resources: 
@@ -26,6 +26,7 @@ Resources:
     Type: AWS::IAM::AccessKey
     Properties:
       UserName: !Ref SmartBardUser
+
   IAMRoleAdmin:
     Type: AWS::IAM::Role
     Properties:
