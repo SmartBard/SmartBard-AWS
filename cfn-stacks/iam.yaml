@@ -7,26 +7,6 @@ Parameters:
     Description: Env Suffix for SMBD IAM Role
     Type: String
 Resources: 
-  SmartBardUser:
-    Type: AWS::IAM::User
-    Properties:
-      UserName: !Sub smbd-developer${Environment}
-      Path: /
-      LoginProfile:
-        PasswordResetRequired: false
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
-        - arn:aws:iam::aws:policy/AWSXrayFullAccess
-        - arn:aws:iam::aws:policy/CloudWatchFullAccess
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
-        - arn:aws:iam::aws:policy/AmazonVPCFullAccess
-        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
-  SmartBardUserAccessKey:
-    Type: AWS::IAM::AccessKey
-    Properties:
-      UserName: !Ref SmartBardUser
-
   IAMRoleAdmin:
     Type: AWS::IAM::Role
     Properties:
@@ -78,6 +58,28 @@ Resources:
                 Effect: "Allow"
                 Action: "*"
                 Resource: "*"
+                
+  SmartBardUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Sub smbd-developer${Environment}
+      Path: /
+      LoginProfile:
+        PasswordResetRequired: false
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+        - arn:aws:iam::aws:policy/AWSXrayFullAccess
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonVPCFullAccess
+        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
+
+  SmartBardUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref SmartBardUser
+
 
 Outputs:
   AdminRoleArn:
