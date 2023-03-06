@@ -7,6 +7,8 @@ Parameters:
     Description: Env Suffix for SMBD IAM Role
     Type: String
 Resources: 
+  Capabilities:
+    - "CAPABILITY_NAMED_IAM"
   SmartBardUser:
     Type: AWS::IAM::User
     Properties:
