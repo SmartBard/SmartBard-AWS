@@ -1,14 +1,15 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard IAM Role Cloudformation Template
 
+Capabilities:
+  - "CAPABILITY_NAMED_IAM"
+
 Parameters: 
   Environment:
     Default: testt
     Description: Env Suffix for SMBD IAM Role
     Type: String
 Resources: 
-  Capabilities:
-    - "CAPABILITY_NAMED_IAM"
   SmartBardUser:
     Type: AWS::IAM::User
     Properties:
