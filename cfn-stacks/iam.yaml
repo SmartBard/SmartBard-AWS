@@ -11,8 +11,6 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       Path: /
-      LoginProfile:
-        PasswordResetRequired: false
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonRDSFullAccess
         - arn:aws:iam::aws:policy/AWSXrayFullAccess
