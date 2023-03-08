@@ -1,0 +1,40 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SmartBard CloudFront distribution Cloudformation Template
+
+Parameters: 
+  Environment:
+    Default: test
+    Description: Env Suffix for SMBD Cloudfront Distribution
+    Type: String
+
+Resources:
+  CloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
+            Id: "S3Origin"
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        Enabled: true
+        DefaultCacheBehavior:
+          TargetOriginId: "S3Origin"
+          ForwardedValues:
+            QueryString: false
+          ViewerProtocolPolicy: "redirect-to-https"
+          AllowedMethods: 
+            - GET
+            - HEAD
+            - OPTIONS
+            - PUT
+            - POST
+            - PATCH
+            - DELETE
+          MinTTL: 0
+        DefaultRootObject: "index.html"
+        Comment: "CloudFront distribution for example-bucket"
+        PriceClass: "PriceClass_All"
+        Aliases:
+          - !Sub smartbard${Environment}.app
