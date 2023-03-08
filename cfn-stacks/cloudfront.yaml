@@ -1,10 +1,9 @@
----
 AWSTemplateFormatVersion: 2010-09-09
 Description: SmartBard CloudFront distribution Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: test
+    Default: testt
     Description: Env Suffix for SMBD Cloudfront Distribution
     Type: String
 
