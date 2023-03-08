@@ -12,6 +12,9 @@ Resources:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+          SslSupportMethod: sni-only
         Origins:
           - DomainName: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
             Id: "S3Origin"
