@@ -8,11 +8,6 @@ Parameters:
     Type: String
 
 Resources:
-  CloudFrontOriginAccessIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: "OAI for CloudFront Distribution"
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
@@ -25,11 +20,7 @@ Resources:
           - DomainName: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
             Id: "S3Origin"
             S3OriginConfig:
-              OriginAccessIdentity:
-                Fn::Join:
-                  - ""
-                  - - "origin-access-identity/cloudfront/"
-                    - !Ref CloudFrontOriginAccessIdentity
+              OriginAccessIdentity: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
         Enabled: true
         DefaultCacheBehavior:
           TargetOriginId: "S3Origin"
