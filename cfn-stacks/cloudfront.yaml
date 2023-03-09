@@ -8,23 +8,34 @@ Parameters:
     Type: String
 
 Resources:
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "OAI for CloudFront Distribution"
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       DistributionConfig:
         ViewerCertificate:
           AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+          MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Origins:
           - DomainName: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
             Id: "S3Origin"
-            CustomOriginConfig: 
-              OriginProtocolPolicy: match-viewer
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - "origin-access-identity/cloudfront/"
+                    - !Ref CloudFrontOriginAccessIdentity
         Enabled: true
         DefaultCacheBehavior:
           TargetOriginId: "S3Origin"
           ForwardedValues:
             QueryString: false
+          CachePolicyId: !Sub smbd-cache${Environment}
           ViewerProtocolPolicy: "redirect-to-https"
           AllowedMethods: 
             - GET
@@ -36,7 +47,14 @@ Resources:
             - DELETE
           MinTTL: 0
         DefaultRootObject: "index.html"
-        Comment: "CloudFront distribution for example-bucket"
+        Comment: "CloudFront distribution for SMBD S3 Bucket"
         PriceClass: "PriceClass_All"
+        HttpVersion: http2and3
+        IPV6Enabled: true
         Aliases:
-          - !Sub ${Environment}.smartbard.durkin.app
+          - !Sub smbd${Environment}.smartbard.durkin.app
+
+Output:
+  DistributionId:
+    Description: CloudFront Distribution ID
+    Value: !Ref CloudFrontDistribution
