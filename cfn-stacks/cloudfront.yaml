@@ -8,6 +8,16 @@ Parameters:
     Type: String
 
 Resources:
+  CloudFrontOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties: 
+      OriginAccessControlConfig:
+        Description: Default Origin Access Control
+        Name: smbd-oac${Environment}
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
@@ -20,7 +30,8 @@ Resources:
           - DomainName: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
             Id: "S3Origin"
             S3OriginConfig:
-              OriginAccessIdentity: !Sub smbd-bucket${Environment}.s3.us-east-1.amazonaws.com
+              OriginAccessIdentity: ''
+              OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
         Enabled: true
         DefaultCacheBehavior:
           TargetOriginId: "S3Origin"
@@ -38,7 +49,7 @@ Resources:
             - DELETE
           MinTTL: 0
         DefaultRootObject: "index.html"
-        Comment: "CloudFront distribution for SMBD S3 Bucket"
+        Comment: "CloudFront Distribution for SMBD S3 Bucket"
         PriceClass: "PriceClass_All"
         HttpVersion: http2and3
         IPV6Enabled: true
