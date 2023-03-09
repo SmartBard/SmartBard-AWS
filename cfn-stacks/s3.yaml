@@ -41,4 +41,9 @@ Resources:
               StringEquals:
                 AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
 
-
+  S3AccessPoint:
+    Type: AWS::S3::AccessPoint
+    Properties: 
+      Bucket: !Sub smbd-bucket${Environment}
+      Name: !Sub smbd-access-point${Environment}
+      Policy: !Ref S3BucketPolicy
