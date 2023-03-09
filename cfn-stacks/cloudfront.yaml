@@ -39,4 +39,4 @@ Resources:
         Comment: "CloudFront distribution for example-bucket"
         PriceClass: "PriceClass_All"
         Aliases:
-          - !Sub smartbard${Environment}.app
+          - !Sub ${Environment}.smartbard.durkin.app
