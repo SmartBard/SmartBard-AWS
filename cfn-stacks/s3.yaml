@@ -58,7 +58,7 @@ Resources:
               - "s3:PutObject"
               - "s3:DeleteObject"
               - "s3:List*"
-            Resource: "arn:aws:s3:::smbd-bucket-test/*"
+            Resource: !Sub arn:aws:s3:us-east-1:013130384093:accesspoint/smbd${Environment}-point
             Condition:
               StringEquals:
                 AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
