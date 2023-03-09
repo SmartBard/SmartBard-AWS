@@ -3,7 +3,7 @@ Description: SmartBard CloudFront distribution Cloudformation Template
 
 Parameters: 
   Environment:
-    Default: testt
+    Default: test
     Description: Env Suffix for SMBD Cloudfront Distribution
     Type: String
 
@@ -16,7 +16,7 @@ Resources:
           AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
           SslSupportMethod: sni-only
         Origins:
-          - DomainName: smartbard.durkin.app
+          - DomainName: smbd-bucket${Environment}.s3.us-east-1.amazonaws.com	
             Id: "S3Origin"
             S3OriginConfig:
               OriginAccessIdentity: ""
