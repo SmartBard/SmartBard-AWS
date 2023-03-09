@@ -27,7 +27,7 @@ Resources:
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties: 
-      IpAddressType: dualstack
+      IpAddressType: ipv4
       Name: !Sub smbd-load-balancer${Environment}
       Scheme: internet-facing
       SecurityGroups: 
