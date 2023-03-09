@@ -13,7 +13,7 @@ Resources:
     Properties: 
       OriginAccessControlConfig:
         Description: Default Origin Access Control
-        Name: smbd-oac${Environment}
+        Name: !Sub smbd-oac${Environment}
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
