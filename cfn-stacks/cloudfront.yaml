@@ -31,7 +31,7 @@ Resources:
             Id: "S3Origin"
             S3OriginConfig:
               OriginAccessIdentity: ''
-              OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
+            OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
         Enabled: true
         DefaultCacheBehavior:
           TargetOriginId: "S3Origin"
