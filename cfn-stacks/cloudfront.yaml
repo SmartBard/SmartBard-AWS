@@ -35,7 +35,7 @@ Resources:
           TargetOriginId: "S3Origin"
           ForwardedValues:
             QueryString: false
-          CachePolicyId: !Sub smbd-cache${Environment}
+          CachePolicyId: CachingOptimized
           ViewerProtocolPolicy: "redirect-to-https"
           AllowedMethods: 
             - GET
@@ -54,7 +54,7 @@ Resources:
         Aliases:
           - !Sub smbd${Environment}.smartbard.durkin.app
 
-Output:
+Outputs:
   DistributionId:
     Description: CloudFront Distribution ID
     Value: !Ref CloudFrontDistribution
