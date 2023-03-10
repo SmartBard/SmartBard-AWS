@@ -1,9 +1,6 @@
 name: PROD - Deploy Cloudfront Cloudformation Stack
 
 on:
-  push:
-    paths:
-      - "cfn-stacks/cloudfront.yaml"
   workflow_dispatch:
     inputs:
       region:
