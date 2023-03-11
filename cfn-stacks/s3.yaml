@@ -23,15 +23,26 @@ Resources:
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Sub smbd-bucket${Environment}
+      Bucket: !Ref S3Bucket
       PolicyDocument: 
         Version: 2012-10-17
         Statement:
-          - Action:
-              - 's3:GetObject'
-              - 's3:PutObject'
-              - 's3:List*'
-            Effect: Allow
-            Resource: 
-              - !Sub "arn:aws:s3:::smbd-bucket${Environment}/*"
-            Principal: '*'
+          - Sid: "AllowCloudFrontServicePrincipal"
+            Effect: "Allow"
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action: 
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:DeleteObject"
+              - "s3:List*"
+            Resource: "arn:aws:s3:::smbd-bucket-test/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
+
+  S3AccessPoint:
+    Type: AWS::S3::AccessPoint
+    Properties: 
+      Bucket: !Ref S3Bucket
+      Name: !Sub smbd-access-point${Environment}

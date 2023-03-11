@@ -23,3 +23,19 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub smbd-ec2${Environment}
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      Name: !Sub smbd-load-balancer${Environment}
+      Scheme: internet-facing
+      SecurityGroups: 
+        - Fn::ImportValue:
+            !Sub "DefaultSecurityGroup${Environment}"
+      Subnets: 
+        - Fn::ImportValue:
+            !Sub "SubnetA${Environment}"
+        - Fn::ImportValue:
+            !Sub "SubnetB${Environment}"
+      Type: application
