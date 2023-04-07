@@ -39,3 +39,16 @@ Resources:
         - Fn::ImportValue:
             !Sub "SubnetB${Environment}"
       Type: application
+
+  KeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties: 
+      KeyName: smbd-keypair${Environment}
+      KeyType: rsa
+
+Outputs:
+  KeyPairName:
+    Value: !Ref KeyPair
+  KeyPairPrivateKey:
+    Value: !GetAtt KeyPair.KeyMaterial
+  
