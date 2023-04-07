@@ -33,7 +33,8 @@ Resources:
     Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
       UserPoolId: !Ref UserPool
-      ProviderName: google
+      ProviderName: Google
+      ProviderType: Google
       ProviderDetails:
         client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
         client_secret: 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
@@ -64,7 +65,7 @@ Resources:
         - profile
       SupportedIdentityProviders:
         - COGNITO
-        - google
+        - Google
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
