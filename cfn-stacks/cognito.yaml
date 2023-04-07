@@ -30,7 +30,7 @@ Resources:
           TemporaryPasswordValidityDays: 7
 
   UserPoolIdentityProviderGoogle:
-    Type: AWS::Cognito::UserPoolIdentityProviderGoogle
+    Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
       UserPoolId: !Ref UserPool
       ProviderName: google
