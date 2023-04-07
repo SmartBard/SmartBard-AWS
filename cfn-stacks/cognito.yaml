@@ -63,10 +63,7 @@ Resources:
       ProviderDetails:
         client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
         client_secret: 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
-        authorize_scopes: 
-          - email
-          - openid
-          - profile
+        authorize_scopes: "email profile openid"
       AttributeMapping:
         email: email
         given_name: given_name
