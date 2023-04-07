@@ -29,25 +29,10 @@ Resources:
           RequireUppercase: true
           TemporaryPasswordValidityDays: 7
 
-  UserPoolIdentityProviderGoogle:
-    Type: AWS::Cognito::UserPoolIdentityProvider
-    Properties:
-      UserPoolId: !Ref UserPool
-      ProviderName: Google
-      ProviderType: Google
-      ProviderDetails:
-        client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
-        client_secret: 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
-        authorize_scopes: 
-          - email
-      AttributeMapping:
-        email: email
-        given_name: given_name
-        family_name: family_name
-        username: sub
-
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
+    DependsOn: 
+      - UserPoolIdentityProviderGoogle
     Properties:
       UserPoolId: !Ref UserPool
       AllowedOAuthFlowsUserPoolClient: true
@@ -68,6 +53,25 @@ Resources:
       SupportedIdentityProviders:
         - COGNITO
         - Google
+
+  UserPoolIdentityProviderGoogle:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      UserPoolId: !Ref UserPool
+      ProviderName: Google
+      ProviderType: Google
+      ProviderDetails:
+        client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
+        client_secret: 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
+        authorize_scopes: 
+          - email
+          - openid
+          - profile
+      AttributeMapping:
+        email: email
+        given_name: given_name
+        family_name: family_name
+        username: sub
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
@@ -94,7 +98,3 @@ Resources:
         Fn::ImportValue:
           !Sub "StudentRoleArn${Environment}"
       UserPoolId: !Ref UserPool
-
-
-      
-
