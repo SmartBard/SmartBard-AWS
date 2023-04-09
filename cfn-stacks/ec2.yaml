@@ -58,7 +58,7 @@ Resources:
             !Sub "VPC${Environment}"
       TargetType: instance
       Targets:
-        - Id: !Ref LoadBalancer
+        - Id: !Ref EC2Instance
           Port: 3000
 
 
