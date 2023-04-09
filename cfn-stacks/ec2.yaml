@@ -57,6 +57,10 @@ Resources:
         Fn::ImportValue:
             !Sub "VPC${Environment}"
       TargetType: instance
+      Targets:
+        - Id: !Ref LoadBalancer
+          Port: 3000
+
 
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
