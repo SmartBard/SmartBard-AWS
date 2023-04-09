@@ -47,6 +47,17 @@ Resources:
             !Sub "SubnetB${Environment}"
       Type: application
 
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub smbd-target-group${Environment}
+      Protocol: HTTPS
+      Port: 3000
+      VpcId:
+        Fn::ImportValue:
+            !Sub "VPC${Environment}"
+      TargetType: instance
+
 Outputs:
   KeyFingerprint:
     Description: The EC2 fingerprint
