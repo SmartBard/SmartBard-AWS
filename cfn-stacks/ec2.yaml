@@ -70,9 +70,6 @@ Resources:
       SslPolicy: ELBSecurityPolicy-2016-08
       Certificates:
         - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
-      SecurityGroups:
-        - Fn::ImportValue:
-            !Sub "DefaultSecurityGroup${Environment}"
 
 Outputs:
   KeyFingerprint:
