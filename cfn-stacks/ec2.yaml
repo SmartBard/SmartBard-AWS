@@ -13,6 +13,25 @@ Resources:
     Properties: 
       KeyName: !Sub smbd-keypair${Environment}
       KeyType: rsa
+      
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instances
+      VpcId: 
+        Fn::ImportValue:
+            !Sub "VPC${Environment}"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref LoadBalancer
+      SecurityGroupEgress:
+        - IpProtocol: all
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-ec2-sg${Environment}
 
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -22,8 +41,7 @@ Resources:
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
-        - Fn::ImportValue:
-            !Sub "DefaultSecurityGroup${Environment}"
+        - !Ref EC2SecurityGroup
       SubnetId:
         Fn::ImportValue:
           !Sub "SubnetA${Environment}"
@@ -60,7 +78,6 @@ Resources:
       Targets:
         - Id: !Ref EC2Instance
           Port: 3000
-
 
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
