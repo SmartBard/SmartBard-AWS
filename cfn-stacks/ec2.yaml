@@ -13,7 +13,7 @@ Resources:
     Properties: 
       KeyName: !Sub smbd-keypair${Environment}
       KeyType: rsa
-      
+
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -25,7 +25,9 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3000
           ToPort: 3000
-          SourceSecurityGroupId: !Ref LoadBalancer
+          SourceSecurityGroupId: 
+            Fn::ImportValue:
+              !Sub "DefaultSecurityGroup${Environment}"
       SecurityGroupEgress:
         - IpProtocol: all
           CidrIp: 0.0.0.0/0
