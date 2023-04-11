@@ -31,11 +31,17 @@ Resources:
 
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
+    DependsOn: 
+      - UserPoolIdentityProviderGoogle
     Properties:
       UserPoolId: !Ref UserPool
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
         - http://localhost:3000
+        - https://dev.smartbard.durkin.app
+        - https://smbd-test.smartbard.durkin.app
+        - https://prod.smartbard.durkin.app
+        - https://smartbard.durkin.app
       AllowedOAuthFlows:
         - code
         - implicit
@@ -46,6 +52,23 @@ Resources:
         - profile
       SupportedIdentityProviders:
         - COGNITO
+        - Google
+
+  UserPoolIdentityProviderGoogle:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      UserPoolId: !Ref UserPool
+      ProviderName: Google
+      ProviderType: Google
+      ProviderDetails:
+        client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
+        client_secret: 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
+        authorize_scopes: "email profile openid"
+      AttributeMapping:
+        email: email
+        given_name: given_name
+        family_name: family_name
+        username: sub
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
@@ -72,7 +95,3 @@ Resources:
         Fn::ImportValue:
           !Sub "StudentRoleArn${Environment}"
       UserPoolId: !Ref UserPool
-
-
-      
-
