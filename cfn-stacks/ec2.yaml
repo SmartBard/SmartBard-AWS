@@ -70,7 +70,6 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      DependsOn: EC2Instance
       Name: !Sub smbd-target-group${Environment}
       Protocol: HTTPS
       Port: 3000
@@ -85,7 +84,6 @@ Resources:
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      DependsOn: LoadBalancer
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
