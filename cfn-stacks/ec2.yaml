@@ -8,6 +8,12 @@ Parameters:
     Type: String
 
 Resources: 
+  KeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties: 
+      KeyName: !Sub smbd-key-pair${Environment}
+      KeyType: rsa
+
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -33,6 +39,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0ff8a91507f77f867
+      KeyName: !Ref KeyPair
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
@@ -87,12 +94,12 @@ Resources:
       Certificates:
         - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
 
-# Outputs:
-#   KeyFingerprint:
-#     Description: The EC2 fingerprint
-#     Value: !GetAtt KeyPair.KeyFingerprint
+Outputs:
+  KeyFingerprint:
+    Description: The EC2 fingerprint
+    Value: !GetAtt KeyPair.KeyFingerprint
   
-#   KeyPairId:
-#     Description: The keypair id
-#     Value: !GetAtt KeyPair.KeyPairId
+  KeyPairId:
+    Description: The keypair id
+    Value: !GetAtt KeyPair.KeyPairId
   
