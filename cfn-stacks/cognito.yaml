@@ -38,9 +38,8 @@ Resources:
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
         - http://localhost:3000
-        - https://dev.smartbard.durkin.app
         - https://smbd-test.smartbard.durkin.app
-        - https://prod.smartbard.durkin.app
+        - https://smbd-prod.smartbard.durkin.app
         - https://smartbard.durkin.app
       AllowedOAuthFlows:
         - code
