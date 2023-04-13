@@ -14,88 +14,88 @@ Resources:
       KeyName: !Sub smbd-keypair${Environment}
       KeyType: rsa
 
-  EC2SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for EC2 instances
-      VpcId: 
-        Fn::ImportValue:
-            !Sub "VPC${Environment}"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 3000
-          ToPort: 3000
-          SourceSecurityGroupId: 
-            Fn::ImportValue:
-              !Sub "DefaultSecurityGroup${Environment}"
-      SecurityGroupEgress:
-        - IpProtocol: all
-          CidrIp: 0.0.0.0/0
-      Tags:
-        - Key: Name
-          Value: !Sub smbd-ec2-sg${Environment}
+  # EC2SecurityGroup:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupDescription: Security group for EC2 instances
+  #     VpcId: 
+  #       Fn::ImportValue:
+  #           !Sub "VPC${Environment}"
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 3000
+  #         ToPort: 3000
+  #         SourceSecurityGroupId: 
+  #           Fn::ImportValue:
+  #             !Sub "DefaultSecurityGroup${Environment}"
+  #     SecurityGroupEgress:
+  #       - IpProtocol: all
+  #         CidrIp: 0.0.0.0/0
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub smbd-ec2-sg${Environment}
 
-  EC2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      DependsOn: KeyPair
-      ImageId: ami-0ff8a91507f77f867
-      KeyName: !Ref KeyPair
-      InstanceType: t3.small
-      Monitoring: true
-      SecurityGroupIds:
-        - !Ref EC2SecurityGroup
-      SubnetId:
-        Fn::ImportValue:
-          !Sub "SubnetA${Environment}"
-      Tags:
-        - Key: Name
-          Value: !Sub smbd-ec2${Environment}
+  # EC2Instance:
+  #   Type: AWS::EC2::Instance
+  #   Properties:
+  #     DependsOn: KeyPair
+  #     ImageId: ami-0ff8a91507f77f867
+  #     KeyName: !Ref KeyPair
+  #     InstanceType: t3.small
+  #     Monitoring: true
+  #     SecurityGroupIds:
+  #       - !Ref EC2SecurityGroup
+  #     SubnetId:
+  #       Fn::ImportValue:
+  #         !Sub "SubnetA${Environment}"
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub smbd-ec2${Environment}
 
-  LoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties: 
-      IpAddressType: ipv4
-      Name: !Sub smbd-load-balancer${Environment}
-      Scheme: internet-facing
-      SecurityGroups: 
-        - Fn::ImportValue:
-            !Sub "DefaultSecurityGroup${Environment}"
-      Subnets: 
-        - Fn::ImportValue:
-            !Sub "SubnetA${Environment}"
-        - Fn::ImportValue:
-            !Sub "SubnetB${Environment}"
-      Type: application
+  # LoadBalancer:
+  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  #   Properties: 
+  #     IpAddressType: ipv4
+  #     Name: !Sub smbd-load-balancer${Environment}
+  #     Scheme: internet-facing
+  #     SecurityGroups: 
+  #       - Fn::ImportValue:
+  #           !Sub "DefaultSecurityGroup${Environment}"
+  #     Subnets: 
+  #       - Fn::ImportValue:
+  #           !Sub "SubnetA${Environment}"
+  #       - Fn::ImportValue:
+  #           !Sub "SubnetB${Environment}"
+  #     Type: application
 
-  TargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      DependsOn: EC2Instance
-      Name: !Sub smbd-target-group${Environment}
-      Protocol: HTTPS
-      Port: 3000
-      VpcId:
-        Fn::ImportValue:
-            !Sub "VPC${Environment}"
-      TargetType: instance
-      Targets:
-        - Id: !Ref EC2Instance
-          Port: 3000
+  # TargetGroup:
+  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
+  #   Properties:
+  #     DependsOn: EC2Instance
+  #     Name: !Sub smbd-target-group${Environment}
+  #     Protocol: HTTPS
+  #     Port: 3000
+  #     VpcId:
+  #       Fn::ImportValue:
+  #           !Sub "VPC${Environment}"
+  #     TargetType: instance
+  #     Targets:
+  #       - Id: !Ref EC2Instance
+  #         Port: 3000
 
-  LoadBalancerListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DependsOn: LoadBalancer
-      DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref TargetGroup
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 3000
-      Protocol: HTTPS
-      SslPolicy: ELBSecurityPolicy-2016-08
-      Certificates:
-        - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+  # LoadBalancerListener:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   Properties:
+  #     DependsOn: LoadBalancer
+  #     DefaultActions:
+  #       - Type: forward
+  #         TargetGroupArn: !Ref TargetGroup
+  #     LoadBalancerArn: !Ref LoadBalancer
+  #     Port: 3000
+  #     Protocol: HTTPS
+  #     SslPolicy: ELBSecurityPolicy-2016-08
+  #     Certificates:
+  #       - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
 
 Outputs:
   KeyFingerprint:
