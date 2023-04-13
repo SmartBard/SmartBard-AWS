@@ -8,11 +8,11 @@ Parameters:
     Type: String
 
 Resources: 
-  # KeyPair:
-  #   Type: AWS::EC2::KeyPair
-  #   Properties: 
-  #     KeyName: !Sub smbd-key-pair${Environment}
-  #     KeyType: rsa
+  KeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties: 
+      KeyName: !Sub smbd-key-pair${Environment}
+      KeyType: rsa
 
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -39,7 +39,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0ff8a91507f77f867
-      # KeyName: !Ref KeyPair
+      KeyName: !Ref KeyPair
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
