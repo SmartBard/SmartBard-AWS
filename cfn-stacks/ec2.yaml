@@ -33,7 +33,6 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0ff8a91507f77f867
-      KeyName: !Ref KeyPair
       InstanceType: t3.small
       Monitoring: true
       SecurityGroupIds:
