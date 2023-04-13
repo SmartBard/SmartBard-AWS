@@ -38,6 +38,7 @@ Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
+      DependsOn: KeyPair
       ImageId: ami-0ff8a91507f77f867
       KeyName: !Ref KeyPair
       InstanceType: t3.small
@@ -70,6 +71,7 @@ Resources:
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
+      DependsOn: EC2Instance
       Name: !Sub smbd-target-group${Environment}
       Protocol: HTTPS
       Port: 3000
@@ -84,6 +86,7 @@ Resources:
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
+      DependsOn: LoadBalancer
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
