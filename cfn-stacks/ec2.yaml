@@ -32,7 +32,7 @@ Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0ff8a91507f77f867
+      ImageId: ami-007855ac798b5175e
       InstanceType: t3.small
       KeyName: smbd-test-keypair
       Monitoring: true
