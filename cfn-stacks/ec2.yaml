@@ -96,6 +96,8 @@ Resources:
         Fn::ImportValue:
             !Sub "VPC${Environment}"
       TargetType: instance
+      Matcher:
+        HttpCode: 401
       Targets:
         - Id: !Ref EC2Instance
           Port: 3000
