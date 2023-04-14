@@ -34,6 +34,7 @@ Resources:
     Properties:
       ImageId: ami-0ff8a91507f77f867
       InstanceType: t3.small
+      KeyName: smbd-test-keypair
       Monitoring: true
       SecurityGroupIds:
         - !Ref EC2SecurityGroup
