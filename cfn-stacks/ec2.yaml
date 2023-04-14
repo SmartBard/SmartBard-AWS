@@ -65,7 +65,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Sub smbd-target-group${Environment}
-      Protocol: HTTPS
+      Protocol: HTTP
       Port: 3000
       VpcId:
         Fn::ImportValue:
@@ -82,7 +82,7 @@ Resources:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 3000
+      Port: 443
       Protocol: HTTPS
       SslPolicy: ELBSecurityPolicy-2016-08
       Certificates:
