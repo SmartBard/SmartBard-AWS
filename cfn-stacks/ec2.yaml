@@ -90,33 +90,6 @@ Resources:
             !Sub "SubnetB${Environment}"
       Type: application
 
-  LBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Security group for load balancer
-      VpcId:
-        Fn::ImportValue:
-          !Sub "VPC${Environment}"
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: ::/0
-        - IpProtocol: tcp
-          FromPort: 3000
-          ToPort: 3000
-          SourceSecurityGroupId: !Ref EC2SecurityGroup
-      SecurityGroupEgress:
-        - IpProtocol: all
-          CidrIp: 0.0.0.0/0
-      Tags:
-        - Key: Name
-          Value: !Sub smbd-lb-sg${Environment}
-
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
