@@ -7,7 +7,30 @@ Parameters:
     Description: Env Suffix for SMBD EC2 Server
     Type: String
 
-Resources: 
+Resources:
+  LBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for load balancer
+      VpcId:
+        Fn::ImportValue:
+          !Sub "VPC${Environment}"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: ::/0
+      SecurityGroupEgress:
+        - IpProtocol: all
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-lb-sg${Environment}
+ 
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -26,6 +49,15 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub smbd-ec2-sg${Environment}
+
+  LBSGIngressRule:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref LBSecurityGroup
+      IpProtocol: tcp
+      FromPort: 3000
+      ToPort: 3000
+      SourceSecurityGroupId: !Ref EC2SecurityGroup
 
   EC2Instance:
     Type: AWS::EC2::Instance
