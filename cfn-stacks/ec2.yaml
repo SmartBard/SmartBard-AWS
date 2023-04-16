@@ -123,8 +123,6 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       AutoScalingGroupName: smbd-scaler
-      AvailabilityZones:
-        - us-east-1a
       DefaultInstanceWarmup: 300
       DesiredCapacity: 1
       LaunchTemplate:
@@ -135,3 +133,6 @@ Resources:
       MinSize: 1
       MaxSize: 1
       MaxInstanceLifetime: 86400
+      VPCZoneIdentifier:
+        - Fn::ImportValue:
+            !Sub "SubnetA${Environment}"
