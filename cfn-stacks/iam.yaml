@@ -80,6 +80,19 @@ Resources:
                 Action: "*"
                 Resource: "*"
 
+  AccessKeySecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Access Key for API
+      SecretString: !Ref SmartBardUserAccessKey
+      Name: smbd-access-key
+  
+  SecretKeySecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Secret Key for API
+      SecretString: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
+      Name: smbd-secret-key
 
 Outputs:
   AdminRoleArn:

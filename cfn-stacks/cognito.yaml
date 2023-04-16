@@ -94,3 +94,17 @@ Resources:
         Fn::ImportValue:
           !Sub "StudentRoleArn${Environment}"
       UserPoolId: !Ref UserPool
+
+  UserPoolIdSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Cognito User pool ID for SMBD
+      SecretString: !Ref UserPool
+      Name: cognito-pool
+
+  ClientIdSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Cognito Client ID for SMBD
+      SecretString: !Ref UserPoolClient
+      Name: cognito-client
