@@ -85,7 +85,7 @@ Resources:
         InstanceType: t3.small
         KeyName: smbd-test-keypair
         IamInstanceProfile:
-          - Arn: !GetAtt EC2IAMRoleProfile.Arn
+          Arn: !GetAtt EC2IAMRoleProfile.Arn
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         TagSpecifications:
