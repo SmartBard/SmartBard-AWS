@@ -62,7 +62,6 @@ Resources:
         ImageId: ami-007855ac798b5175e
         InstanceType: t3.small
         KeyName: smbd-test-keypair
-        Monitoring: true
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         NetworkInterfaces:
