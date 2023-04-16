@@ -55,21 +55,26 @@ Resources:
       ToPort: 3000
       SourceSecurityGroupId: !Ref EC2SecurityGroup
 
-  EC2Instance:
-    Type: AWS::EC2::Instance
+  EC2LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
     Properties:
-      ImageId: ami-007855ac798b5175e
-      InstanceType: t3.small
-      KeyName: smbd-test-keypair
-      Monitoring: true
-      SecurityGroupIds:
-        - !Ref EC2SecurityGroup
-      SubnetId:
-        Fn::ImportValue:
-          !Sub "SubnetA${Environment}"
-      Tags:
-        - Key: Name
-          Value: !Sub smbd-ec2${Environment}
+      LaunchTemplateData:
+        ImageId: ami-007855ac798b5175e
+        InstanceType: t3.small
+        KeyName: smbd-test-keypair
+        Monitoring: true
+        SecurityGroupIds:
+          - !Ref EC2SecurityGroup
+        NetworkInterfaces:
+          - SubnetId:
+              Fn::ImportValue:
+                !Sub "SubnetA${Environment}"
+        TagSpecification:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: !Sub smbd-ec2${Environment}
+      LaunchTemplateName: smbd-template
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -114,4 +119,20 @@ Resources:
       SslPolicy: ELBSecurityPolicy-2016-08
       Certificates:
         - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
-  
+
+  EC2AutoScaler:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: smbd-scaler
+      AvailabilityZones:
+        - us-east-1b
+      DefaultInstanceWarmup: 300
+      DesiredCapacity: 1
+      LaunchTemplate:
+        LaunchTemplateId: !Ref EC2LaunchTemplate
+        Version: 1
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      MinSize: 1
+      MaxSize: 1
+      MaxInstanceLifeTime: 86400
