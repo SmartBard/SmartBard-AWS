@@ -66,8 +66,8 @@ Resources:
       BackupRetentionPeriod: 7
       Engine: postgres
       EngineVersion: 14.5
-      MasterUsername: '{{resolve:secretsmanager:DBUsername:SecretString}}'
-      MasterUserPassword: '{{resolve:secretsmanager:DBPassword:SecretString}}'
+      MasterUsername: '{{resolve:secretsmanager:db-username:SecretString}}'
+      MasterUserPassword: '{{resolve:secretsmanager:db-password:SecretString}}'
       MultiAZ: false
       Port: 5432
       PubliclyAccessible: true
