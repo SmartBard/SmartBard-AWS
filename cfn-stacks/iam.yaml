@@ -22,6 +22,7 @@ Resources:
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/CloudFrontFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
 
   SmartBardUserAccessKey:
     Type: AWS::IAM::AccessKey
