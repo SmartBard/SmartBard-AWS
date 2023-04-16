@@ -64,11 +64,6 @@ Resources:
         KeyName: smbd-test-keypair
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
-        NetworkInterfaces:
-          - DeviceIndex: 0
-            SubnetId:
-              Fn::ImportValue:
-                !Sub "SubnetA${Environment}"
         TagSpecifications:
           - ResourceType: instance
             Tags:
