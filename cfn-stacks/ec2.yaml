@@ -131,4 +131,4 @@ Resources:
         - !Ref TargetGroup
       MinSize: 1
       MaxSize: 1
-      MaxInstanceLifeTime: 86400
+      MaxInstanceLifetime: 86400
