@@ -24,6 +24,12 @@ Resources:
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
       RoleName: smbd-iam-role
 
+  EC2IAMRoleProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2IAMRole
+
   LBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -79,7 +85,7 @@ Resources:
         InstanceType: t3.small
         KeyName: smbd-test-keypair
         IamInstanceProfile:
-          - Arn: !Ref EC2IAMRole
+          - Arn: !Ref EC2IAMRoleProfile
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         TagSpecifications:
