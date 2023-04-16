@@ -22,6 +22,7 @@ Resources:
     Properties:
       Description: Password for DB
       GenerateSecretString:
+        ExcludePunctuation: true
         IncludeSpace: false
         PasswordLength: 32
       Name: db-password
