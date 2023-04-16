@@ -121,7 +121,7 @@ Resources:
     Properties:
       AutoScalingGroupName: smbd-scaler
       AvailabilityZones:
-        - us-east-1b
+        - us-east-1a
       DefaultInstanceWarmup: 300
       DesiredCapacity: 1
       LaunchTemplate:
