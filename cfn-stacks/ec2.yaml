@@ -69,7 +69,7 @@ Resources:
           - SubnetId:
               Fn::ImportValue:
                 !Sub "SubnetA${Environment}"
-        TagSpecification:
+        TagSpecifications:
           - ResourceType: instance
             Tags:
               - Key: Name
