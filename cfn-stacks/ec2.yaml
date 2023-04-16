@@ -65,7 +65,8 @@ Resources:
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         NetworkInterfaces:
-          - SubnetId:
+          - DeviceIndex: 0
+            SubnetId:
               Fn::ImportValue:
                 !Sub "SubnetA${Environment}"
         TagSpecifications:
