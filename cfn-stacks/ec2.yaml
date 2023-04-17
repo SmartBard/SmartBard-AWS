@@ -93,6 +93,37 @@ Resources:
             Tags:
               - Key: Name
                 Value: !Sub smbd-ec2${Environment}
+        UserData:
+          Fn::Base64:
+            !Sub |
+              #!/bin/bash
+              sudo apt-get update -y;
+              sudo apt-get upgrade -y;
+              sudo apt-get install awscli -y;
+              sudo apt-get install jq -y;
+              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -;
+              sudo apt-get install -y nodejs;
+              sudo mkdir /opt/smbd;
+              cd /opt/smbd;
+              sudo git clone https://github.com/SmartBard/SmartBard-API;
+              cd /opt/smbd/SmartBard-API;
+              cp /opt/smbd/SmartBard-API/deploy/smbd.service /etc/systemd/system/smbd.service;
+              sudo npm install;
+              sudo touch .env;
+              sudo echo POSTGRES_HOST=$(aws secretsmanager get-secret-value --secret-id db-hostname --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_USER=$(aws secretsmanager get-secret-value --secret-id db-username --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_DATABASE=postgres >> .env;
+              sudo echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id db-password --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo CLOUDWATCH_GROUP_NAME=smartbard-application >> .env;
+              sudo echo AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id smbd-access-key --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id smbd-secret-key --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_REGION=us-east-1 >> .env;
+              sudo echo NODE_PORT=3000 >> .env;
+              sudo echo NODE_ENV=production >> .env;
+              sudo echo COGNITO_USER_POOL=$(aws secretsmanager get-secret-value --secret-id cognito-pool --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo COGNITO_CLIENTID=$(aws secretsmanager get-secret-value --secret-id cognito-client --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo systemctl enable smbd.service;
+              sudo systemctl start smbd.service;
       LaunchTemplateName: smbd-template
 
   LoadBalancer:
