@@ -74,32 +74,32 @@ Resources:
           AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-      Origins:
-        - DomainName: !Sub smbd-images${Environment}.s3.us-east-1.amazonaws.com
-          Id: "S3Origin"
-          S3OriginConfig:
-            OriginAccessIdentity: ''
-          OriginAccessControlId: !GetAtt CloudFrontImagesOriginAccessControl.Id
-      Enabled: true
-      DefaultCacheBehavior:
-        TargetOriginid: "S3Origin"
-        ForwardedValues:
-          QueryString: false
-        CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-        ViewerProtocolPolicy: "redirect-to-https"
-        AllowedMethods: 
-          - GET
-          - HEAD
-          - OPTIONS
-          - PUT
-          - POST
-          - PATCH
-          - DELETE
-        MinTTL: 0
-      DefaultRootObject: "index.html"
-      Comment: "CloudFront Distribution for SMBD S3 Bucket"
-      PriceClass: "PriceClass_All"
-      HttpVersion: http2and3
-      IPV6Enabled: true
-      Aliases:
-        - !Sub smbd-images${Environment}.smartbard.durkin.app
+        Origins:
+          - DomainName: !Sub smbd-images${Environment}.s3.us-east-1.amazonaws.com
+            Id: "S3Origin"
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+            OriginAccessControlId: !GetAtt CloudFrontImagesOriginAccessControl.Id
+        Enabled: true
+        DefaultCacheBehavior:
+          TargetOriginid: "S3Origin"
+          ForwardedValues:
+            QueryString: false
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          ViewerProtocolPolicy: "redirect-to-https"
+          AllowedMethods: 
+            - GET
+            - HEAD
+            - OPTIONS
+            - PUT
+            - POST
+            - PATCH
+            - DELETE
+          MinTTL: 0
+        DefaultRootObject: "index.html"
+        Comment: "CloudFront Distribution for SMBD S3 Bucket"
+        PriceClass: "PriceClass_All"
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        Aliases:
+          - !Sub smbd-images${Environment}.smartbard.durkin.app
