@@ -95,10 +95,10 @@ Resources:
           - PATCH
           - DELETE
         MinTTL: 0
-        DefaultRootObject: "index.html"
-        Comment: "CloudFront Distribution for SMBD S3 Bucket"
-        PriceClass: "PriceClass_All"
-        HttpVersion: http2and3
-        IPV6Enabled: true
-        Aliases:
-          - !Sub smbd-images${Environment}.smartbard.durkin.app
+      DefaultRootObject: "index.html"
+      Comment: "CloudFront Distribution for SMBD S3 Bucket"
+      PriceClass: "PriceClass_All"
+      HttpVersion: http2and3
+      IPV6Enabled: true
+      Aliases:
+        - !Sub smbd-images${Environment}.smartbard.durkin.app
