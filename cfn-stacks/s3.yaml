@@ -77,7 +77,7 @@ Resources:
             Resource: "arn:aws:s3:::smbd-images-test/*"
             Condition:
               StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront:013130384093:distribution/E1P1Y3KJXST6UW"
+                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E1P1Y3KJXST6UW"
 
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
