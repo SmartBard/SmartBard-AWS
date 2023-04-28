@@ -51,7 +51,7 @@ Resources:
             Resource: "arn:aws:s3:::smbd-bucket-test/*"
             Condition:
               StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
+                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E4DN4LTG1AZH1"
 
   S3ImagesBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -72,7 +72,7 @@ Resources:
             Resource: "arn:aws:s3:::smbd-images-test/*"
             Condition:
               StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront:013130384093:distribution/E32HK34VWVH71Z"
+                AWS:SourceArn: "arn:aws:cloudfront:013130384093:distribution/E1P1Y3KJXST6UW"
 
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
