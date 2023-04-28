@@ -122,7 +122,7 @@ Resources:
               sudo echo NODE_ENV=production >> .env;
               sudo echo COGNITO_USER_POOL=$(aws secretsmanager get-secret-value --secret-id cognito-pool --region us-east-1 | jq -r .SecretString) >> .env;
               sudo echo COGNITO_CLIENTID=$(aws secretsmanager get-secret-value --secret-id cognito-client --region us-east-1 | jq -r .SecretString) >> .env;
-              sudo echo S3_IMAGE_ACCESS_POINT=arn:aws:s3:us-east-1:013130384093:accesspoint/smbd-images-ap--test >> .env;
+              sudo echo S3_IMAGE_ACCESS_POINT=arn:aws:s3:us-east-1:013130384093:accesspoint/smbd-images-ap-test >> .env;
               sudo echo S3_IMAGE_BASE_URL=https://smbd-images-test.smartbard.durkin.app >> .env;
               sudo systemctl enable smbd.service;
               sudo systemctl start smbd.service;

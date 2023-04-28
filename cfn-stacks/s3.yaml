@@ -57,6 +57,11 @@ Resources:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref S3ImagesBucket
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -76,6 +81,11 @@ Resources:
 
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
-    Properties: 
+    Properties:
       Bucket: !Ref S3ImagesBucket
-      Name: !Sub smbd-images-ap-${Environment}
+      Name: !Sub smbd-images-ap${Environment}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
