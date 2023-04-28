@@ -19,7 +19,19 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-              
+  
+  S3ImagesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub smbd-images${Environment}
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -41,8 +53,29 @@ Resources:
               StringEquals:
                 AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
 
+  S3ImagesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3ImagesBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: "AllowCloudFrontServicePrincipal"
+            Effect: "Allow"
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:DeleteObject"
+              - "s3:List*"
+            Resource: "arn:aws:s3:::smbd-images-test/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: "arn:aws:cloudfront:013130384093:distribution/E32HK34VWVH71Z"
+
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
     Properties: 
-      Bucket: !Ref S3Bucket
-      Name: !Sub smbd-access-point${Environment}
+      Bucket: !Ref S3ImagesBucket
+      Name: !Sub smbd-images-ap-${Environment}
