@@ -24,6 +24,11 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: !Sub smbd-images${Environment}
       VersioningConfiguration:
         Status: Enabled
@@ -57,11 +62,6 @@ Resources:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref S3ImagesBucket
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
       PolicyDocument:
         Version: 2012-10-17
         Statement:
