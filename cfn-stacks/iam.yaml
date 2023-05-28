@@ -139,4 +139,6 @@ Outputs:
 
   EC2RoleArn:
     Value: !GetAtt EC2IAMRoleProfile.Arn
-    Description: IAM Role ARN for EC2 Instance 
+    Description: IAM Role ARN for EC2 Instance
+    Export:
+      Name: EC2RoleArn
