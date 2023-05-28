@@ -8,28 +8,6 @@ Parameters:
     Type: String
 
 Resources:
-  EC2IAMRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
-      RoleName: smbd-iam-role
-
-  EC2IAMRoleProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles:
-        - !Ref EC2IAMRole
-
   LBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -85,7 +63,8 @@ Resources:
         InstanceType: t3.small
         KeyName: smbd-test-keypair
         IamInstanceProfile:
-          Arn: !GetAtt EC2IAMRoleProfile.Arn
+          Arn:
+            !Fn::ImportValue: EC2RoleArn
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         TagSpecifications:

@@ -6,7 +6,29 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD IAM Role
     Type: String
-Resources: 
+Resources:
+  EC2IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+              Action:
+                - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+      RoleName: smbd-iam-role
+ 
+  EC2IAMRoleProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2IAMRole
+
   SmartBardUser:
     Type: AWS::IAM::User
     Properties:
@@ -114,3 +136,7 @@ Outputs:
   SecretKey:
     Value: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
     Description: AWSSecretAccessKey of  SmartBard User
+
+  EC2RoleArn:
+    Value: !GetAtt EC2IAMRoleProfile
+    Description: IAM Role ARN for EC2 Instance 
