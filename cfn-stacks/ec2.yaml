@@ -64,7 +64,7 @@ Resources:
         KeyName: smbd-test-keypair
         IamInstanceProfile:
           Arn:
-            !Fn::ImportValue: EC2RoleArn
+            Fn::ImportValue: EC2RoleArn
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         TagSpecifications:
