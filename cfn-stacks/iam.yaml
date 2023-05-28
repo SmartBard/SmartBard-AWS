@@ -21,7 +21,7 @@ Resources:
                 - 'sts:AssumeRole'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
-      RoleName: smbd-iam-role
+      RoleName: smbd-ec2-iam-role
  
   EC2IAMRoleProfile:
     Type: AWS::IAM::InstanceProfile
