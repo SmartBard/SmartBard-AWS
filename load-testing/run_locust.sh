@@ -1,0 +1,1 @@
+locust -f locustfile.py -H https://dev-api.smartbard.durkin.app --headless -u 40 -r 1 -t 600
