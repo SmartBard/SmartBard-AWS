@@ -141,4 +141,10 @@ Outputs:
     Value: !GetAtt EC2IAMRoleProfile.Arn
     Description: IAM Role ARN for EC2 Instance
     Export:
+      Name: EC2RoleArn
+
+  EC2RoleArnTest:
+    Value: !GetAtt EC2IAMRoleProfile.Arn
+    Description: Temp value for changing
+    Export:
       Name: !Sub "EC2RoleArn${Environment}"
