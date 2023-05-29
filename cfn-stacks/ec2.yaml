@@ -7,7 +7,26 @@ Parameters:
     Description: Env Suffix for SMBD EC2 Server
     Type: String
 
-Resources: 
+Resources:
+  LBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for load balancer
+      VpcId:
+        Fn::ImportValue:
+          !Sub "VPC${Environment}"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: all
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub smbd-lb-sg${Environment}
+ 
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -19,9 +38,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3000
           ToPort: 3000
-          SourceSecurityGroupId: 
-            Fn::ImportValue:
-              !Sub "DefaultSecurityGroup${Environment}"
+          SourceSecurityGroupId: !Ref LBSecurityGroup
       SecurityGroupEgress:
         - IpProtocol: all
           CidrIp: 0.0.0.0/0
@@ -29,20 +46,66 @@ Resources:
         - Key: Name
           Value: !Sub smbd-ec2-sg${Environment}
 
-  EC2Instance:
-    Type: AWS::EC2::Instance
+  LBSGIngressRule:
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      ImageId: ami-0ff8a91507f77f867
-      InstanceType: t3.small
-      Monitoring: true
-      SecurityGroupIds:
-        - !Ref EC2SecurityGroup
-      SubnetId:
-        Fn::ImportValue:
-          !Sub "SubnetA${Environment}"
-      Tags:
-        - Key: Name
-          Value: !Sub smbd-ec2${Environment}
+      GroupId: !Ref LBSecurityGroup
+      IpProtocol: tcp
+      FromPort: 3000
+      ToPort: 3000
+      SourceSecurityGroupId: !Ref EC2SecurityGroup
+
+  EC2LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-007855ac798b5175e
+        InstanceType: t3.small
+        KeyName: smbd-test-keypair
+        IamInstanceProfile:
+          Arn:
+            Fn::ImportValue: EC2RoleArn
+        SecurityGroupIds:
+          - !Ref EC2SecurityGroup
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: !Sub smbd-ec2${Environment}
+        UserData:
+          Fn::Base64:
+            !Sub |
+              #!/bin/bash
+              sudo apt-get update -y;
+              sudo apt-get upgrade -y;
+              sudo apt-get install awscli -y;
+              sudo apt-get install jq -y;
+              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -;
+              sudo apt-get install -y nodejs;
+              sudo mkdir /opt/smbd;
+              cd /opt/smbd;
+              sudo git clone https://github.com/SmartBard/SmartBard-API;
+              cd /opt/smbd/SmartBard-API;
+              cp /opt/smbd/SmartBard-API/deploy/smbd.service /etc/systemd/system/smbd.service;
+              sudo npm install;
+              sudo touch .env;
+              sudo echo POSTGRES_HOST=$(aws secretsmanager get-secret-value --secret-id db-hostname --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_USER=$(aws secretsmanager get-secret-value --secret-id db-username --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_DATABASE=postgres >> .env;
+              sudo echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id db-password --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo CLOUDWATCH_GROUP_NAME=smartbard-application >> .env;
+              sudo echo AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id smbd-access-key --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id smbd-secret-key --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_REGION=us-east-1 >> .env;
+              sudo echo NODE_PORT=3000 >> .env;
+              sudo echo NODE_ENV=production >> .env;
+              sudo echo COGNITO_USER_POOL=$(aws secretsmanager get-secret-value --secret-id cognito-pool --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo COGNITO_CLIENTID=$(aws secretsmanager get-secret-value --secret-id cognito-client --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo S3_IMAGE_ACCESS_POINT=arn:aws:s3:us-east-1:013130384093:accesspoint/smbd-images-ap-test >> .env;
+              sudo echo S3_IMAGE_BASE_URL=https://smbd-images-test.smartbard.durkin.app >> .env;
+              sudo systemctl enable smbd.service;
+              sudo systemctl start smbd.service;
+      LaunchTemplateName: smbd-template
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -51,8 +114,7 @@ Resources:
       Name: !Sub smbd-load-balancer${Environment}
       Scheme: internet-facing
       SecurityGroups: 
-        - Fn::ImportValue:
-            !Sub "DefaultSecurityGroup${Environment}"
+        - !Ref LBSecurityGroup
       Subnets: 
         - Fn::ImportValue:
             !Sub "SubnetA${Environment}"
@@ -64,15 +126,14 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Sub smbd-target-group${Environment}
-      Protocol: HTTPS
+      Protocol: HTTP
       Port: 3000
       VpcId:
         Fn::ImportValue:
             !Sub "VPC${Environment}"
       TargetType: instance
-      Targets:
-        - Id: !Ref EC2Instance
-          Port: 3000
+      Matcher:
+        HttpCode: 401
 
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -81,9 +142,26 @@ Resources:
         - Type: forward
           TargetGroupArn: !Ref TargetGroup
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 3000
+      Port: 443
       Protocol: HTTPS
       SslPolicy: ELBSecurityPolicy-2016-08
       Certificates:
         - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
-  
+
+  EC2AutoScaler:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: smbd-scaler
+      DefaultInstanceWarmup: 300
+      DesiredCapacity: 1
+      LaunchTemplate:
+        LaunchTemplateId: !Ref EC2LaunchTemplate
+        Version: 1
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      MinSize: 1
+      MaxSize: 1
+      MaxInstanceLifetime: 86400
+      VPCZoneIdentifier:
+        - Fn::ImportValue:
+            !Sub "SubnetA${Environment}"

@@ -19,7 +19,24 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-              
+  
+  S3ImagesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      BucketName: !Sub smbd-images${Environment}
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -39,10 +56,36 @@ Resources:
             Resource: "arn:aws:s3:::smbd-bucket-test/*"
             Condition:
               StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E32HK34VWVH71Z"
+                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E4DN4LTG1AZH1"
+
+  S3ImagesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3ImagesBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: "AllowCloudFrontServicePrincipal"
+            Effect: "Allow"
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:DeleteObject"
+              - "s3:List*"
+            Resource: "arn:aws:s3:::smbd-images-test/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E1P1Y3KJXST6UW"
 
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
-    Properties: 
-      Bucket: !Ref S3Bucket
-      Name: !Sub smbd-access-point${Environment}
+    Properties:
+      Bucket: !Ref S3ImagesBucket
+      Name: !Sub smbd-images-ap${Environment}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false

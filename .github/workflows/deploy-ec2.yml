@@ -34,5 +34,6 @@ jobs:
         with:
           name: smbd-ec2-test
           template: cfn-stacks/ec2.yaml
+          capabilities: "CAPABILITY_NAMED_IAM"
           parameter-overrides: "Environment=-test"
           no-fail-on-empty-changeset: "1"

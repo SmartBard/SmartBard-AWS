@@ -6,14 +6,35 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD IAM Role
     Type: String
-Resources: 
+Resources:
+  EC2IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+      RoleName: smbd-ec2-iam-role
+ 
+  EC2IAMRoleProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2IAMRole
+
   SmartBardUser:
     Type: AWS::IAM::User
     Properties:
       Path: /
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonRDSFullAccess
-        - arn:aws:iam::aws:policy/AWSXrayFullAccess
         - arn:aws:iam::aws:policy/CloudWatchFullAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
@@ -22,6 +43,7 @@ Resources:
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/CloudFrontFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
 
   SmartBardUserAccessKey:
     Type: AWS::IAM::AccessKey
@@ -80,6 +102,19 @@ Resources:
                 Action: "*"
                 Resource: "*"
 
+  AccessKeySecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Access Key for API
+      SecretString: !Ref SmartBardUserAccessKey
+      Name: smbd-access-key
+  
+  SecretKeySecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Secret Key for API
+      SecretString: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
+      Name: smbd-secret-key
 
 Outputs:
   AdminRoleArn:
@@ -101,3 +136,9 @@ Outputs:
   SecretKey:
     Value: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
     Description: AWSSecretAccessKey of  SmartBard User
+
+  EC2RoleArn:
+    Value: !GetAtt EC2IAMRoleProfile.Arn
+    Description: IAM Role ARN for EC2 Instance
+    Export:
+      Name: EC2RoleArn

@@ -6,25 +6,27 @@ Parameters:
     Description: Env Suffix for SMBD Bucket
     Type: String
 
-  DBUser:
-    Default: smartbarduser
-    Description: The database admin account username
-    Type: String
-    MinLength: '1'
-    MaxLength: '16'
-    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    ConstraintDescription: Alphanumeric characters
-
+Resources:
+  DBUsername:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Username for DB
+      GenerateSecretString:
+        ExcludePunctuation: true
+        IncludeSpace: false
+        PasswordLength: 16
+      Name: db-username
+  
   DBPassword:
-    Default: smartbarduser
-    Description: The database admin account password (will need to decide where to store pwd for security later)
-    Type: String
-    MinLength: '1'
-    MaxLength: '41'
-    AllowedPattern: '[a-zA-Z0-9]+'
-    ConstraintDescription: Alphanumeric characters
-
-Resources: 
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Password for DB
+      GenerateSecretString:
+        ExcludePunctuation: true
+        IncludeSpace: false
+        PasswordLength: 32
+      Name: db-password
+ 
   DBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -65,8 +67,8 @@ Resources:
       BackupRetentionPeriod: 7
       Engine: postgres
       EngineVersion: 14.5
-      MasterUsername: !Ref DBUser
-      MasterUserPassword: !Ref DBPassword
+      MasterUsername: '{{resolve:secretsmanager:db-username:SecretString}}'
+      MasterUserPassword: '{{resolve:secretsmanager:db-password:SecretString}}'
       MultiAZ: false
       Port: 5432
       PubliclyAccessible: true
@@ -74,3 +76,10 @@ Resources:
       VPCSecurityGroups:        
         - !Ref DBSecurityGroup
     DeletionPolicy: Snapshot
+
+  DBHostname:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Hostname for DB
+      SecretString: !GetAtt DBInstance.Endpoint.Address
+      Name: db-hostname
