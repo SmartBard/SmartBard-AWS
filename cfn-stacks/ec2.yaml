@@ -64,7 +64,7 @@ Resources:
         KeyName: !Sub smbd-keypair${Environment}
         IamInstanceProfile:
           Arn:
-            Fn::ImportValue: EC2RoleArn
+            Fn::ImportValue: !Sub "EC2RoleArn${Environment}"
         SecurityGroupIds:
           - !Ref EC2SecurityGroup
         TagSpecifications:
