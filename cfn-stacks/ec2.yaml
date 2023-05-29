@@ -156,7 +156,7 @@ Resources:
       DesiredCapacity: 1
       LaunchTemplate:
         LaunchTemplateId: !Ref EC2LaunchTemplate
-        Version: 1
+        Version: !GetAtt EC2LaunchTemplate.LatestVersionNumber
       TargetGroupARNs:
         - !Ref TargetGroup
       MinSize: 1
