@@ -76,6 +76,9 @@ Resources:
       VPCSecurityGroups:        
         - !Ref DBSecurityGroup
     DeletionPolicy: Snapshot
+    DependsOn:
+      - DBUsername
+      - DBPassword
 
   DBHostname:
     Type: 'AWS::SecretsManager::Secret'
