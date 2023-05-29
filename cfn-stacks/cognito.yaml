@@ -100,11 +100,11 @@ Resources:
     Properties:
       Description: Cognito User pool ID for SMBD
       SecretString: !Ref UserPool
-      Name: cognito-pool
+      Name: !Sub "cognito-pool${Environment}"
 
   ClientIdSecret:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
       Description: Cognito Client ID for SMBD
       SecretString: !Ref UserPoolClient
-      Name: cognito-client
+      Name: !Sub "cognito-client${Environment}"

@@ -61,7 +61,7 @@ Resources:
       LaunchTemplateData:
         ImageId: ami-007855ac798b5175e
         InstanceType: t3.small
-        KeyName: smbd-test-keypair
+        KeyName: !Sub smbd-keypair${Environment}
         IamInstanceProfile:
           Arn:
             Fn::ImportValue: EC2RoleArn
@@ -89,20 +89,20 @@ Resources:
               cp /opt/smbd/SmartBard-API/deploy/smbd.service /etc/systemd/system/smbd.service;
               sudo npm install;
               sudo touch .env;
-              sudo echo POSTGRES_HOST=$(aws secretsmanager get-secret-value --secret-id db-hostname --region us-east-1 | jq -r .SecretString) >> .env;
-              sudo echo POSTGRES_USER=$(aws secretsmanager get-secret-value --secret-id db-username --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_HOST=$(aws secretsmanager get-secret-value --secret-id db-hostname${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_USER=$(aws secretsmanager get-secret-value --secret-id db-username${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
               sudo echo POSTGRES_DATABASE=postgres >> .env;
-              sudo echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id db-password --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id db-password${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
               sudo echo CLOUDWATCH_GROUP_NAME=smartbard-application >> .env;
-              sudo echo AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id smbd-access-key --region us-east-1 | jq -r .SecretString) >> .env;
-              sudo echo AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id smbd-secret-key --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_ACCESS_KEY_ID=$(aws secretsmanager get-secret-value --secret-id smbd-access-key${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo AWS_SECRET_ACCESS_KEY=$(aws secretsmanager get-secret-value --secret-id smbd-secret-key${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
               sudo echo AWS_REGION=us-east-1 >> .env;
               sudo echo NODE_PORT=3000 >> .env;
-              sudo echo NODE_ENV=production >> .env;
-              sudo echo COGNITO_USER_POOL=$(aws secretsmanager get-secret-value --secret-id cognito-pool --region us-east-1 | jq -r .SecretString) >> .env;
-              sudo echo COGNITO_CLIENTID=$(aws secretsmanager get-secret-value --secret-id cognito-client --region us-east-1 | jq -r .SecretString) >> .env;
-              sudo echo S3_IMAGE_ACCESS_POINT=arn:aws:s3:us-east-1:013130384093:accesspoint/smbd-images-ap-test >> .env;
-              sudo echo S3_IMAGE_BASE_URL=https://smbd-images-test.smartbard.durkin.app >> .env;
+              sudo echo NODE_ENV=${Environment} >> .env;
+              sudo echo COGNITO_USER_POOL=$(aws secretsmanager get-secret-value --secret-id cognito-pool${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo COGNITO_CLIENTID=$(aws secretsmanager get-secret-value --secret-id cognito-client${Environment} --region us-east-1 | jq -r .SecretString) >> .env;
+              sudo echo S3_IMAGE_ACCESS_POINT=arn:aws:s3:us-east-1:013130384093:accesspoint/smbd-images-ap${Environment} >> .env;
+              sudo echo S3_IMAGE_BASE_URL=https://smbd-images${Environment}.smartbard.durkin.app >> .env;
               sudo systemctl enable smbd.service;
               sudo systemctl start smbd.service;
       LaunchTemplateName: smbd-template
@@ -151,7 +151,7 @@ Resources:
   EC2AutoScaler:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: smbd-scaler
+      AutoScalingGroupName: !Sub smbd-scaler${Environment}
       DefaultInstanceWarmup: 300
       DesiredCapacity: 1
       LaunchTemplate:

@@ -21,7 +21,7 @@ Resources:
               - 'sts:AssumeRole'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
-      RoleName: smbd-ec2-iam-role
+      RoleName: !Sub smbd-ec2-iam-role${Environment}
  
   EC2IAMRoleProfile:
     Type: AWS::IAM::InstanceProfile
@@ -107,14 +107,14 @@ Resources:
     Properties:
       Description: Access Key for API
       SecretString: !Ref SmartBardUserAccessKey
-      Name: smbd-access-key
+      Name: !Sub "smbd-access-key${Environment}"
   
   SecretKeySecret:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
       Description: Secret Key for API
       SecretString: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
-      Name: smbd-secret-key
+      Name: !Sub "smbd-secret-key${Environment}"
 
 Outputs:
   AdminRoleArn:
@@ -141,4 +141,4 @@ Outputs:
     Value: !GetAtt EC2IAMRoleProfile.Arn
     Description: IAM Role ARN for EC2 Instance
     Export:
-      Name: EC2RoleArn
+      Name: !Sub "EC2RoleArn${Environment}"
