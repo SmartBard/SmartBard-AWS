@@ -86,6 +86,8 @@ Resources:
               cd /opt/smbd;
               sudo git clone https://github.com/SmartBard/SmartBard-API;
               cd /opt/smbd/SmartBard-API;
+              sudo mkdir /opt/smbd/SmartBard-API/uploaded-assets;
+              sudo mkdir /opt/smbd/SmartBard-API/uploaded-assets/media;
               cp /opt/smbd/SmartBard-API/deploy/smbd.service /etc/systemd/system/smbd.service;
               sudo npm install;
               sudo touch .env;
