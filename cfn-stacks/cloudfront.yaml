@@ -6,6 +6,14 @@ Parameters:
     Default: test
     Description: Env Suffix for SMBD Cloudfront Distribution
     Type: String
+  Certificate:
+    Default: ''
+    Description: ARN of existing ACM certificate
+    Type: String
+  Domain:
+    Default: 'durkin.app'
+    Description: Domain name being used for app
+    Type: String
 
 Resources:
   CloudFrontOriginAccessControl:
@@ -33,7 +41,7 @@ Resources:
     Properties:
       DistributionConfig:
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+          AcmCertificateArn: !Sub ${Certificate}
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Origins:
@@ -64,7 +72,7 @@ Resources:
         HttpVersion: http2and3
         IPV6Enabled: true
         Aliases:
-          - !Sub smbd${Environment}.smartbard.durkin.app
+          - !Sub smbd${Environment}.smartbard.${Domain}
   
   CloudFrontImagesDistribution:
     Type: "AWS::CloudFront::Distribution"
@@ -102,7 +110,7 @@ Resources:
         HttpVersion: http2and3
         IPV6Enabled: true
         Aliases:
-          - !Sub smbd-images${Environment}.smartbard.durkin.app
+          - !Sub smbd-images${Environment}.smartbard.${Domain}
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy

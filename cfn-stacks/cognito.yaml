@@ -7,6 +7,11 @@ Parameters:
     Description: Env Suffix for AWS Cognito
     Type: String
 
+  Domain:
+    Default: 'durkin.app'
+    Description: Domain name for app
+    Type: String
+
 Resources: 
   UserPool:
     Type: AWS::Cognito::UserPool
@@ -38,9 +43,9 @@ Resources:
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
         - http://localhost:3000
-        - https://smbd-test.smartbard.durkin.app
-        - https://smbd-prod.smartbard.durkin.app
-        - https://smartbard.durkin.app
+        - !Sub https://smbd-test.smartbard.${Domain}
+        - !Sub https://smbd-prod.smartbard.${Domain}
+        - https://smartbard.${Domain}
       AllowedOAuthFlows:
         - code
         - implicit

@@ -7,6 +7,11 @@ Parameters:
     Description: Env Suffix for SMBD EC2 Server
     Type: String
 
+  Certificate:
+    Default: ''
+    Description: ARN of existing ACM certificate
+    Type: String
+
 Resources:
   LBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -148,7 +153,7 @@ Resources:
       Protocol: HTTPS
       SslPolicy: ELBSecurityPolicy-2016-08
       Certificates:
-        - CertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+        - CertificateArn: !Sub ${Certificate}
 
   EC2AutoScaler:
     Type: AWS::AutoScaling::AutoScalingGroup
