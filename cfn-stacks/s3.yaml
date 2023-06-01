@@ -12,6 +12,11 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
       BucketName: !Sub smbd-bucket${Environment}
       VersioningConfiguration:
         Status: Enabled
@@ -36,48 +41,6 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-            
-  S3BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument: 
-        Version: 2012-10-17
-        Statement:
-          - Sid: "AllowCloudFrontServicePrincipal"
-            Effect: "Allow"
-            Principal:
-              Service: "cloudfront.amazonaws.com"
-            Action: 
-              - "s3:GetObject"
-              - "s3:PutObject"
-              - "s3:DeleteObject"
-              - "s3:List*"
-            Resource: !Sub "arn:aws:s3:::smbd-bucket${Environment}/*"
-            Condition:
-              StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E4DN4LTG1AZH1"
-
-  S3ImagesBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref S3ImagesBucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Sid: "AllowCloudFrontServicePrincipal"
-            Effect: "Allow"
-            Principal:
-              Service: "cloudfront.amazonaws.com"
-            Action:
-              - "s3:GetObject"
-              - "s3:PutObject"
-              - "s3:DeleteObject"
-              - "s3:List*"
-            Resource: !Sub "arn:aws:s3:::smbd-images${Environment}/*"
-            Condition:
-              StringEquals:
-                AWS:SourceArn: "arn:aws:cloudfront::013130384093:distribution/E1P1Y3KJXST6UW"
 
   S3AccessPoint:
     Type: AWS::S3::AccessPoint
@@ -89,3 +52,16 @@ Resources:
         BlockPublicPolicy: false
         IgnorePublicAcls: false
         RestrictPublicBuckets: false
+
+Outputs:
+  S3AppBucketArn:
+    Description: ARN of S3 bucket for app
+    Value: !Ref S3Bucket
+    Export:
+      Name: !Sub S3AppBucketArn${Environment}
+
+  S3ImagesBucketArn:
+    Description: ARN of S3 bucket for assets
+    Value: !Ref S3ImagesBucket
+    Export:
+      Name: !Sub S3ImagesBucketArn${Environment}

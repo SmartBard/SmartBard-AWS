@@ -103,3 +103,53 @@ Resources:
         IPV6Enabled: true
         Aliases:
           - !Sub smbd-images${Environment}.smartbard.durkin.app
+
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Fn::ImportValue: !Sub S3AppBucketArn${Environment}
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: "AllowCloudFrontServicePrincipal"
+            Effect: "Allow"
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:DeleteObject"
+              - "s3:List*"
+            Resource: !Sub "arn:aws:s3:::smbd-bucket${Environment}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Join
+                                 - ''
+                                 - - 'arn:aws:cloudfront::013130384093:distribution/'
+                                   - !Ref CloudFrontDistribution
+
+  S3ImagesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Fn::ImportValue: !Sub S3ImagesBucketArn${Environment}
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: "AllowCloudFrontServicePrincipal"
+            Effect: "Allow"
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:DeleteObject"
+              - "s3:List*"
+            Resource: !Sub "arn:aws:s3:::smbd-images${Environment}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Join
+                                 - ''
+                                 - - 'arn:aws:cloudfront::013130384093:distribution/'
+                                   - !Ref CloudFrontImagesDistribution
