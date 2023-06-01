@@ -41,7 +41,7 @@ Resources:
     Properties:
       DistributionConfig:
         ViewerCertificate:
-          AcmCertificateArn: !Sub ${Certificate}
+          AcmCertificateArn: !Ref Certificate
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Origins:
@@ -79,7 +79,7 @@ Resources:
     Properties:
       DistributionConfig:
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada
+          AcmCertificateArn: !Ref Certificate
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Origins:
