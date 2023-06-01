@@ -8,7 +8,7 @@ Parameters:
     Type: String
 
   Certificate:
-    Default: ''
+    Default: 'arn'
     Description: ARN of existing ACM certificate
     Type: String
 

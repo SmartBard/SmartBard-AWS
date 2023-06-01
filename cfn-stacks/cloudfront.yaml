@@ -7,7 +7,7 @@ Parameters:
     Description: Env Suffix for SMBD Cloudfront Distribution
     Type: String
   Certificate:
-    Default: ''
+    Default: 'arn'
     Description: ARN of existing ACM certificate
     Type: String
   Domain:
