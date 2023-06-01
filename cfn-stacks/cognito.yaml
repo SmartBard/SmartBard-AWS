@@ -48,7 +48,7 @@ Resources:
         - email
       UserPoolName: !Sub smbd-user-pool${Environment}
       LambdaConfig:
-        PreSignUp: !Ref LambdaTrigger
+        PreSignUp: !GetAtt LambdaTrigger.Arn
       Policies:
         PasswordPolicy:
           MinimumLength: 6
