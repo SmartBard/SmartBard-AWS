@@ -112,7 +112,7 @@ Resources:
               sudo echo S3_IMAGE_BASE_URL=https://smbd-images${Environment}.smartbard.durkin.app >> .env;
               sudo systemctl enable smbd.service;
               sudo systemctl start smbd.service;
-      LaunchTemplateName: smbd-template
+      LaunchTemplateName: !Sub smbd-template${Environment}
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
