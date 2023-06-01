@@ -170,7 +170,7 @@ Outputs:
       Name: !Sub "EC2RoleArn${Environment}"
 
   LambdaRole:
-    Value: !Ref LambdaExecutionRole
+    Value: !GetAtt LambdaExecutionRole.Arn
     Description: ARN of role for lambda function
     Export:
       Name: !Sub "LambdaRole${Environment}"
