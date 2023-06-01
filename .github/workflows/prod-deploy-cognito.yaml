@@ -31,5 +31,5 @@ jobs:
         with:
           name: smbd-cognito-prod
           template: cfn-stacks/cognito.yaml
-          parameter-overrides: "Environment=-prod"
+          parameter-overrides: "Environment=-prod,Domain=durkin.app"
           no-fail-on-empty-changeset: "1"
