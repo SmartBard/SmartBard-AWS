@@ -34,5 +34,5 @@ jobs:
         with:
           name: smbd-cognito-test
           template: cfn-stacks/cognito.yaml
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-test,Domain=durkin.app"
           no-fail-on-empty-changeset: "1"

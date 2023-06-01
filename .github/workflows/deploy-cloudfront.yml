@@ -34,5 +34,5 @@ jobs:
         with:
           name: smbd-cloudfront-test
           template: cfn-stacks/cloudfront.yaml
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-test,Certificate=arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada,Domain=durkin.app"
           no-fail-on-empty-changeset: "1"
