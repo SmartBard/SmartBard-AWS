@@ -29,6 +29,29 @@ Resources:
       Roles:
         - !Ref EC2IAMRole
 
+  SmartBardExtraPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: "Extra policy to get around 10 policy limit for user"
+      Path: /
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "cloudformation:*"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
+              - "lambda:*"
+              - "logs:DescribeLogGroups"
+              - "states:DescribeStateMachine"
+              - "states:ListStateMachines"
+              - "tag:GetResources"
+              - "xray:GetTraceSummaries"
+              - "xray:BatchGetTraces"
+            Resource: "*"
+
   SmartBardUser:
     Type: AWS::IAM::User
     Properties:
@@ -42,7 +65,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
         - arn:aws:iam::aws:policy/IAMFullAccess
         - arn:aws:iam::aws:policy/CloudFrontFullAccess
-        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - !Ref SmartBardExtraPolicy
         - arn:aws:iam::aws:policy/SecretsManagerReadWrite
 
   SmartBardUserAccessKey:
