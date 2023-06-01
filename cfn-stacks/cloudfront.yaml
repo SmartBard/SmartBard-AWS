@@ -71,6 +71,11 @@ Resources:
         PriceClass: "PriceClass_All"
         HttpVersion: http2and3
         IPV6Enabled: true
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 10
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
         Aliases:
           - !Sub smbd${Environment}.smartbard.${Domain}
   
