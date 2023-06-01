@@ -116,6 +116,32 @@ Resources:
       SecretString: !GetAtt [SmartBardUserAccessKey, SecretAccessKey]
       Name: !Sub "smbd-secret-key${Environment}"
 
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: !Sub smbd-lambda-policy${Environment}
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "logs:CreateLogGroup"
+                Resource: "arn:aws:logs:us-east-1:013130384093:*"
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource:
+                  - !Sub "arn:aws:logs:us-east-1:013130384093:log-group:/aws/lambda/smbd-trigger${Environment}"
+      RoleName: !Sub smbd-lambda-role${Environment}
+
 Outputs:
   AdminRoleArn:
     Description: Role Arn of Admin Role
@@ -142,3 +168,9 @@ Outputs:
     Description: Temp value for changing
     Export:
       Name: !Sub "EC2RoleArn${Environment}"
+
+  LambdaRole:
+    Value: !Ref LambdaExecutionRole
+    Description: ARN of role for lambda function
+    Export:
+      Name: !Sub "LambdaRole${Environment}"
