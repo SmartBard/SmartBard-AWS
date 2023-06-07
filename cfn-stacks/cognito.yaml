@@ -12,6 +12,16 @@ Parameters:
     Description: Domain name for app
     Type: String
 
+  CognitoID:
+    Default: ''
+    Description: ClientID for Google OAuth
+    Type: String
+
+  CognitoSecret:
+    Default: ''
+    Description: Secret for Google OAuth
+    Type: String
+
 Resources:
   LambdaTrigger:
     Type: AWS::Lambda::Function
@@ -89,8 +99,8 @@ Resources:
       ProviderName: Google
       ProviderType: Google
       ProviderDetails:
-        client_id: 960494938495-jlqmd4c93ggjjlkj0q61765dpukfume1.apps.googleusercontent.com
-        client_secret: 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
+        client_id: !Ref CognitoID
+        client_secret: !Ref CognitoSecret
         authorize_scopes: "email profile openid"
       AttributeMapping:
         email: email
