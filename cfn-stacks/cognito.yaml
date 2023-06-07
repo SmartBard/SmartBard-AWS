@@ -68,6 +68,14 @@ Resources:
           RequireUppercase: true
           TemporaryPasswordValidityDays: 7
 
+  LambdaInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt LambdaTrigger.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     DependsOn: 
