@@ -34,5 +34,5 @@ jobs:
         with:
           name: smbd-cognito-test
           template: cfn-stacks/cognito.yaml
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-test,Domain=durkin.app,CognitoID=${{ secrets.GOOGLE_ID_TEST }},CognitoSecret=${{ secrets.GOOGLE_SECRET_TEST }}"
           no-fail-on-empty-changeset: "1"

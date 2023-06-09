@@ -15,7 +15,7 @@ Resources:
         ExcludePunctuation: true
         IncludeSpace: false
         PasswordLength: 16
-      Name: db-username
+      Name: !Sub "db-username${Environment}"
   
   DBPassword:
     Type: 'AWS::SecretsManager::Secret'
@@ -25,7 +25,7 @@ Resources:
         ExcludePunctuation: true
         IncludeSpace: false
         PasswordLength: 32
-      Name: db-password
+      Name: !Sub "db-password${Environment}"
  
   DBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -67,8 +67,8 @@ Resources:
       BackupRetentionPeriod: 7
       Engine: postgres
       EngineVersion: 14.5
-      MasterUsername: '{{resolve:secretsmanager:db-username:SecretString}}'
-      MasterUserPassword: '{{resolve:secretsmanager:db-password:SecretString}}'
+      MasterUsername: !Sub '{{resolve:secretsmanager:db-username${Environment}:SecretString}}'
+      MasterUserPassword: !Sub '{{resolve:secretsmanager:db-password${Environment}:SecretString}}'
       MultiAZ: false
       Port: 5432
       PubliclyAccessible: true
@@ -76,10 +76,13 @@ Resources:
       VPCSecurityGroups:        
         - !Ref DBSecurityGroup
     DeletionPolicy: Snapshot
+    DependsOn:
+      - DBUsername
+      - DBPassword
 
   DBHostname:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
       Description: Hostname for DB
       SecretString: !GetAtt DBInstance.Endpoint.Address
-      Name: db-hostname
+      Name: !Sub db-hostname${Environment}

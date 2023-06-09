@@ -35,5 +35,5 @@ jobs:
           name: smbd-ec2-test
           template: cfn-stacks/ec2.yaml
           capabilities: "CAPABILITY_NAMED_IAM"
-          parameter-overrides: "Environment=-test"
+          parameter-overrides: "Environment=-test,Certificate=arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada"
           no-fail-on-empty-changeset: "1"

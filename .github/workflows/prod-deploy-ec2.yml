@@ -30,5 +30,5 @@ jobs:
         with:
           name: smbd-ec2-prod
           template: cfn-stacks/ec2.yaml
-          parameter-overrides: "Environment=-prod"
+          parameter-overrides: "Environment=-prod,Certificate=arn:aws:acm:us-east-1:013130384093:certificate/f44022ba-d0a6-40a7-b79e-0edb89655ada"
           no-fail-on-empty-changeset: "1"

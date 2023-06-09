@@ -30,5 +30,6 @@ jobs:
         with:
           name: smbd-iam-prod
           template: cfn-stacks/iam.yaml
+          capabilities: "CAPABILITY_NAMED_IAM"
           parameter-overrides: "Environment=-prod"
           no-fail-on-empty-changeset: "1"
